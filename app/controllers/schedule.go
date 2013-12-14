@@ -39,6 +39,9 @@ func readOmnifocusCsv() []*models.Event {
 	    } else if err != nil {
 	        panic(err)
 	    }
+	    if len(fields) > 4 && fields[4] == "Waiting" {
+	    	continue
+	    }
 	    if len(fields) > 2 {
 	    	event := &models.Event{fields[2], "2013-12-13 10:00", "2013-12-13 11:00", false}
 	    	events = append(events, event)	    	
@@ -46,14 +49,3 @@ func readOmnifocusCsv() []*models.Event {
 	}
 	return events
 }
-
-// func loadTasks(results []interface{}, err error) []*models.Task {
-// 	if err != nil {
-// 		panic(err)
-// 	}
-// 	var tasks []*models.Task
-// 	for _, r := range results {
-// 		tasks = append(tasks, r.(*models.Task))
-// 	}
-// 	return tasks
-// }
