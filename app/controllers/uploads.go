@@ -3,6 +3,7 @@ package controllers
 import (
 	"io"
 	"time"
+	"log"
     "encoding/csv"
 	"github.com/robfig/revel"
 	"github.com/kbkelly/gtd-panic/app/models"
@@ -50,8 +51,18 @@ func readOmnifocusCsv(csvFile io.Reader) []*models.Event {
 	    if len(fields) > 4 && fields[4] == "Waiting" {
 	    	continue
 	    }
-	    // These times are garbage, not sure what to do about it
-    	event := &models.Event{fields[2], "2013-12-13 10:00", "2013-12-13 11:00", false}
+    	event := &models.Event{}
+    	event.Title = fields[2]
+    	event.AllDay = false
+    	if len(fields) > 8 && fields[8] != "" {
+    		log.Print(fields[8])
+    		event.Duration, err = time.ParseDuration(fields[8])
+    		if err != nil {
+    			panic(err)
+    		}
+    	} else {
+    		event.Duration = time.Duration(30) * time.Minute
+    	}
     	events = append(events, event)	    	
     		    // Only show 16 hours worth of stuff (32 * 1/2 hr intervals)
 	    if len(events) >= 32 {
@@ -60,12 +71,11 @@ func readOmnifocusCsv(csvFile io.Reader) []*models.Event {
 	}
 	// starting from now, place each event at 15 minute intervals
 	current := time.Now()
-	interval := time.Duration(30) * time.Minute
 	layout := "2006-01-02 15:04:05" // "Mon Jan 2 15:04:05 -0700 MST 2006"
 	for _, e := range events {
 		e.Start = current.Format(layout)
-		e.End = current.Add(interval).Format(layout)
-		current = current.Add(interval)
+		e.End = current.Add(e.Duration).Format(layout)
+		current = current.Add(e.Duration)
 	}
 	return events
 }
