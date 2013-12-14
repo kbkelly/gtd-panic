@@ -40,17 +40,21 @@ func readOmnifocusCsv() []*models.Event {
 	    } else if err != nil {
 	        panic(err)
 	    }
+	    if len(fields) < 3 {
+	    	continue
+	    }
+	    if fields[1] != "Action" {
+	    	continue
+	    }
 	    if len(fields) > 4 && fields[4] == "Waiting" {
 	    	continue
 	    }
-	    if len(fields) > 2 {
-	    	event := &models.Event{fields[2], "2013-12-13 10:00", "2013-12-13 11:00", false}
-	    	events = append(events, event)	    	
-	    }
+    	event := &models.Event{fields[2], "2013-12-13 10:00", "2013-12-13 11:00", false}
+    	events = append(events, event)	    	
 	}
 	// starting from now, place each event at 15 minute intervals
 	current := time.Now()
-	interval := time.Duration(15) * time.Minute
+	interval := time.Duration(30) * time.Minute
 	layout := "2006-01-02 15:04:05" // "Mon Jan 2 15:04:05 -0700 MST 2006"
 	for _, e := range events {
 		e.Start = current.Format(layout)
