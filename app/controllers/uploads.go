@@ -64,10 +64,6 @@ func readOmnifocusCsv(csvFile io.Reader) []*models.Event {
     		event.Duration = time.Duration(30) * time.Minute
     	}
     	events = append(events, event)	    	
-    		    // Only show 16 hours worth of stuff (32 * 1/2 hr intervals)
-	    if len(events) >= 32 {
-	    	break	    	
-	    }
 	}
 	// starting from now, place each event at 15 minute intervals
 	current := time.Now()
