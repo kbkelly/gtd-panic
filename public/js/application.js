@@ -4,14 +4,11 @@ gtdPanic.controller('UploadController', function($scope, $upload, $rootScope) {
 	$scope.onSelectCsv = function($files) {
 		var $file = $files[0];
       	$scope.upload = $upload.upload({
-        	url: '/omnifocus_upload', //upload.php script, node.js route, or servlet url
+        	url: '/omnifocus_upload',
         	method: 'POST',
-        	// headers: {'headerKey': 'headerValue'}, withCredential: true,
-        	// data: {myObj: $scope.myModelObj},
         	file: $file,
-      }).progress(function(evt) {
-        console.log('percent: ' + parseInt(100.0 * evt.loaded / evt.total));
-      }).success(function(events, status, headers, config) {
+      })
+      	.success(function(events, status, headers, config) {
         $rootScope.allEvents = events;
       })
       .error(function() {
@@ -40,6 +37,5 @@ gtdPanic.controller('ScheduleController', function($scope) {
 			events: allEvents
 		};
 		$scope.eventSources.push(eventConfig);
-		console.log($scope.eventSources);
 	});
 });
