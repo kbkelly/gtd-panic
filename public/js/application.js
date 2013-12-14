@@ -14,8 +14,9 @@ gtdPanic.controller('ScheduleController', function($scope) {
 		[
 			{
 				title: 'FOOBAR',
-				start: '2013-12-24',
-				end: '2013-12-25'
+				start: '2013-12-13 9:00',
+				end: '2013-12-13 10:00',
+				allDay: false
 			}
 		]
 	];
