@@ -1,6 +1,6 @@
 var gtdPanic = angular.module('GtdPanic', ['ui.calendar', 'angularFileUpload']);
 
-gtdPanic.controller('UploadController', function($scope, $upload) {
+gtdPanic.controller('UploadController', function($scope, $upload, $rootScope) {
 	$scope.onSelectCsv = function($files) {
 		var $file = $files[0];
       	$scope.upload = $upload.upload({
@@ -11,8 +11,8 @@ gtdPanic.controller('UploadController', function($scope, $upload) {
         	file: $file,
       }).progress(function(evt) {
         console.log('percent: ' + parseInt(100.0 * evt.loaded / evt.total));
-      }).success(function(data, status, headers, config) {
-        console.log(data);
+      }).success(function(events, status, headers, config) {
+        $rootScope.allEvents = events;
       })
       .error(function() {
       	console.error('File failed to upload');
@@ -30,9 +30,16 @@ gtdPanic.controller('ScheduleController', function($scope) {
 		}
 	};
 
-	$scope.eventSources = [
-		{
-			url: '/schedule'
+	$scope.eventSources = [];
+
+	$scope.$watch('allEvents', function(allEvents) {
+		if (!allEvents) {
+			return;
 		}
-	];
+		var eventConfig = {
+			events: allEvents
+		};
+		$scope.eventSources.push(eventConfig);
+		console.log($scope.eventSources);
+	});
 });
