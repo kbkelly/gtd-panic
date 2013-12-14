@@ -40,11 +40,8 @@ func (c Application) getUser(username string) *models.User {
 }
 
 func (c Application) Index() revel.Result {
-	if c.connected() != nil {
-		return c.Redirect(routes.Hotels.Index())
-	}
-	c.Flash.Error("Please log in first")
 	return c.Render()
+	// return c.Redirect(routes.Schedule.Show())
 }
 
 func (c Application) Register() revel.Result {

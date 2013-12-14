@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"code.google.com/p/go.crypto/bcrypt"
 	"database/sql"
 	"github.com/coopernurse/gorp"
 	_ "github.com/mattn/go-sqlite3"
@@ -31,46 +30,31 @@ func Init() {
 		"Name":     100,
 	})
 
-	t = Dbm.AddTable(models.Hotel{}).SetKeys(true, "HotelId")
+	t = Dbm.AddTable(models.Task{}).SetKeys(true, "TaskId")
 	setColumnSizes(t, map[string]int{
-		"Name":    50,
-		"Address": 100,
-		"City":    40,
-		"State":   6,
-		"Zip":     6,
-		"Country": 40,
-	})
-
-	t = Dbm.AddTable(models.Booking{}).SetKeys(true, "BookingId")
-	t.ColMap("User").Transient = true
-	t.ColMap("Hotel").Transient = true
-	t.ColMap("CheckInDate").Transient = true
-	t.ColMap("CheckOutDate").Transient = true
-	setColumnSizes(t, map[string]int{
-		"CardNumber": 16,
-		"NameOnCard": 50,
+		"Description": 255,
 	})
 
 	Dbm.TraceOn("[gorp]", r.INFO)
 	Dbm.CreateTables()
 
-	bcryptPassword, _ := bcrypt.GenerateFromPassword(
-		[]byte("demo"), bcrypt.DefaultCost)
-	demoUser := &models.User{0, "Demo User", "demo", "demo", bcryptPassword}
-	if err := Dbm.Insert(demoUser); err != nil {
-		panic(err)
-	}
+	// bcryptPassword, _ := bcrypt.GenerateFromPassword(
+	// 	[]byte("demo"), bcrypt.DefaultCost)
+	// demoUser := &models.User{0, "Demo User", "demo", "demo", bcryptPassword}
+	// if err := Dbm.Insert(demoUser); err != nil {
+	// 	panic(err)
+	// }
 
-	hotels := []*models.Hotel{
-		&models.Hotel{0, "Marriott Courtyard", "Tower Pl, Buckhead", "Atlanta", "GA", "30305", "USA", 120},
-		&models.Hotel{0, "W Hotel", "Union Square, Manhattan", "New York", "NY", "10011", "USA", 450},
-		&models.Hotel{0, "Hotel Rouge", "1315 16th St NW", "Washington", "DC", "20036", "USA", 250},
-	}
-	for _, hotel := range hotels {
-		if err := Dbm.Insert(hotel); err != nil {
-			panic(err)
-		}
-	}
+	// hotels := []*models.Hotel{
+	// 	&models.Hotel{0, "Marriott Courtyard", "Tower Pl, Buckhead", "Atlanta", "GA", "30305", "USA", 120},
+	// 	&models.Hotel{0, "W Hotel", "Union Square, Manhattan", "New York", "NY", "10011", "USA", 450},
+	// 	&models.Hotel{0, "Hotel Rouge", "1315 16th St NW", "Washington", "DC", "20036", "USA", 250},
+	// }
+	// for _, hotel := range hotels {
+	// 	if err := Dbm.Insert(hotel); err != nil {
+	// 		panic(err)
+	// 	}
+	// }
 }
 
 type GorpController struct {

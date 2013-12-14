@@ -11,9 +11,9 @@ import (
 	models "github.com/kbkelly/gtd-panic/app/models"
 	tests "github.com/kbkelly/gtd-panic/tests"
 	_ "github.com/mattn/go-sqlite3"
-	controllers2 "github.com/robfig/revel/modules/jobs/app/controllers"
+	controllers1 "github.com/robfig/revel/modules/jobs/app/controllers"
 	_ "github.com/robfig/revel/modules/jobs/app/jobs"
-	controllers1 "github.com/robfig/revel/modules/static/app/controllers"
+	controllers2 "github.com/robfig/revel/modules/static/app/controllers"
 	_ "github.com/robfig/revel/modules/testrunner/app"
 	controllers0 "github.com/robfig/revel/modules/testrunner/app/controllers"
 )
@@ -93,7 +93,22 @@ func main() {
 			
 		})
 	
-	revel.RegisterController((*controllers1.Static)(nil),
+	revel.RegisterController((*controllers1.Jobs)(nil),
+		[]*revel.MethodType{
+			&revel.MethodType{
+				Name: "Status",
+				Args: []*revel.MethodArg{ 
+				},
+				RenderArgNames: map[int][]string{ 
+					19: []string{ 
+						"entries",
+					},
+				},
+			},
+			
+		})
+	
+	revel.RegisterController((*controllers2.Static)(nil),
 		[]*revel.MethodType{
 			&revel.MethodType{
 				Name: "Serve",
@@ -117,21 +132,6 @@ func main() {
 			
 		})
 	
-	revel.RegisterController((*controllers2.Jobs)(nil),
-		[]*revel.MethodType{
-			&revel.MethodType{
-				Name: "Status",
-				Args: []*revel.MethodArg{ 
-				},
-				RenderArgNames: map[int][]string{ 
-					19: []string{ 
-						"entries",
-					},
-				},
-			},
-			
-		})
-	
 	revel.RegisterController((*controllers.Application)(nil),
 		[]*revel.MethodType{
 			&revel.MethodType{
@@ -146,7 +146,7 @@ func main() {
 				Args: []*revel.MethodArg{ 
 				},
 				RenderArgNames: map[int][]string{ 
-					47: []string{ 
+					43: []string{ 
 					},
 				},
 			},
@@ -155,7 +155,7 @@ func main() {
 				Args: []*revel.MethodArg{ 
 				},
 				RenderArgNames: map[int][]string{ 
-					51: []string{ 
+					48: []string{ 
 					},
 				},
 			},
@@ -283,10 +283,25 @@ func main() {
 			
 		})
 	
+	revel.RegisterController((*controllers.Schedule)(nil),
+		[]*revel.MethodType{
+			&revel.MethodType{
+				Name: "Show",
+				Args: []*revel.MethodArg{ 
+				},
+				RenderArgNames: map[int][]string{ 
+					18: []string{ 
+						"tasks",
+					},
+				},
+			},
+			
+		})
+	
 	revel.DefaultValidationKeys = map[string]map[int]string{ 
 		"github.com/kbkelly/gtd-panic/app/controllers.Application.SaveUser": { 
-			55: "verifyPassword",
-			56: "verifyPassword",
+			52: "verifyPassword",
+			53: "verifyPassword",
 		},
 		"github.com/kbkelly/gtd-panic/app/controllers.Hotels.SaveSettings": { 
 			98: "verifyPassword",
