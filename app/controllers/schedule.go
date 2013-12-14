@@ -1,6 +1,9 @@
 package controllers
 
 import (
+	"os"
+	"io"
+    "encoding/csv"
 	"github.com/robfig/revel"
 	"github.com/kbkelly/gtd-panic/app/models"
 )
@@ -10,15 +13,38 @@ type Schedule struct {
 }
 
 func (c Schedule) Show() revel.Result {
-	events := []*models.Event{
-		&models.Event{"Foo", "2013-12-13 10:00", "2013-12-13 11:00", false},
-		&models.Event{"Bar", "2013-12-13 12:00", "2013-12-13 13:00", false},
-		&models.Event{"Baz", "2013-12-13 14:00", "2013-12-13 15:00", false},
-	}
-	// tasks = loadTasks(c.Txn.Select(models.Task{},
-	// 	`select * from Task limit ?`, size))
-
+	events := loadEvents()
 	return c.RenderJson(events)
+}
+
+func loadEvents() []*models.Event {
+	events := readOmnifocusCsv()
+	return events
+}
+
+func readOmnifocusCsv() []*models.Event {
+	var events []*models.Event
+	csvFile, err := os.Open("omnifocus.csv")
+	defer csvFile.Close()
+	if err != nil {
+	    panic(err)
+	}
+	csvReader := csv.NewReader(csvFile)
+	csvReader.TrailingComma = true
+	csvReader.FieldsPerRecord = -1
+	for {
+	    fields, err := csvReader.Read()
+	    if err == io.EOF {
+	        break
+	    } else if err != nil {
+	        panic(err)
+	    }
+	    if len(fields) > 2 {
+	    	event := &models.Event{fields[2], "2013-12-13 10:00", "2013-12-13 11:00", false}
+	    	events = append(events, event)	    	
+	    }
+	}
+	return events
 }
 
 // func loadTasks(results []interface{}, err error) []*models.Task {
@@ -31,22 +57,3 @@ func (c Schedule) Show() revel.Result {
 // 	}
 // 	return tasks
 // }
-
-
-// csvFile, err := os.Open("/path/myfile.csv")
-// defer csvFile.Close()
-// if err != nil {
-//     panic(err)
-// }
-// csvReader := csv.NewReader(csvFile)
-// csvReader.TrailingComma = true
-// for {
-//     fields, err := csvReader.Read()
-//     if err == io.EOF {
-//         break
-//     } else if err != nil {
-//         panic(err)
-//     }
-//     // ... do stuff ...
-// }
-
