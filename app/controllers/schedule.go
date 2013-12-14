@@ -40,17 +40,25 @@ func readOmnifocusCsv() []*models.Event {
 	    } else if err != nil {
 	        panic(err)
 	    }
+	    // Doesn't have a task description, skip it
 	    if len(fields) < 3 {
 	    	continue
 	    }
+	    // Only tasks labeled as Actions
 	    if fields[1] != "Action" {
 	    	continue
 	    }
+	    // Nothing in the Waiting context
 	    if len(fields) > 4 && fields[4] == "Waiting" {
 	    	continue
 	    }
+	    // These times are garbage, not sure what to do about it
     	event := &models.Event{fields[2], "2013-12-13 10:00", "2013-12-13 11:00", false}
     	events = append(events, event)	    	
+    		    // Only show 16 hours worth of stuff (32 * 1/2 hr intervals)
+	    if len(events) >= 32 {
+	    	break	    	
+	    }
 	}
 	// starting from now, place each event at 15 minute intervals
 	current := time.Now()
