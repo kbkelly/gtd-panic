@@ -295,6 +295,18 @@ func main() {
 			
 		})
 	
+	revel.RegisterController((*controllers.Uploads)(nil),
+		[]*revel.MethodType{
+			&revel.MethodType{
+				Name: "Create",
+				Args: []*revel.MethodArg{ 
+				},
+				RenderArgNames: map[int][]string{ 
+				},
+			},
+			
+		})
+	
 	revel.DefaultValidationKeys = map[string]map[int]string{ 
 		"github.com/kbkelly/gtd-panic/app/controllers.Application.SaveUser": { 
 			52: "verifyPassword",

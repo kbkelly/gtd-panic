@@ -15,10 +15,14 @@
     <script type="text/javascript" src="/public/components/angular-ui-calendar/src/calendar.js"></script>
     <script type="text/javascript" src="/public/components/fullcalendar/fullcalendar.js"></script>
     <script type="text/javascript" src="/public/components/fullcalendar/gcal.js"></script>
+    <script type="text/javascript" src="/public/components/ng-file-upload/angular-file-upload.js"></script>
     <script type="text/javascript" src="/public/js/application.js"></script>
   </head>
   <body>
     <div id="content" ng-app="GtdPanic">
+      <div ng-controller="UploadController">
+        <input type="file" name="csvUpload" ng-file-select="onSelectCsv($files)" />
+      </div>
       <div ng-controller="ScheduleController">
         <div ng-model="eventSources" ui-calendar="uiConfig.calendar"></div>
       </div>

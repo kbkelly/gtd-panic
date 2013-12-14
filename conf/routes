@@ -20,6 +20,7 @@ POST    /login                                  Application.Login
 GET     /logout                                 Application.Logout
 
 GET		/schedule								Schedule.Show
+POST	/omnifocus_upload						Uploads.Create
 
 # Map static resources from the /app/public folder to the /public path
 GET     /public/*filepath                       Static.Serve("public")

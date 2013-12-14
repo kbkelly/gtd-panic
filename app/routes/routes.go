@@ -249,3 +249,15 @@ func (_ tSchedule) Show(
 }
 
 
+type tUploads struct {}
+var Uploads tUploads
+
+
+func (_ tUploads) Create(
+		) string {
+	args := make(map[string]string)
+	
+	return revel.MainRouter.Reverse("Uploads.Create", args).Url
+}
+
+
