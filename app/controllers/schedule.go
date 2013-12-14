@@ -10,15 +10,15 @@ type Schedule struct {
 }
 
 func (c Schedule) Show() revel.Result {
-	tasks := []*models.Task{
-		&models.Task{1, "Foo"},
-		&models.Task{2, "Bar"},
-		&models.Task{3, "Baz"},
+	events := []*models.Event{
+		&models.Event{"Foo", "2013-12-13 10:00", "2013-12-13 11:00", false},
+		&models.Event{"Bar", "2013-12-13 12:00", "2013-12-13 13:00", false},
+		&models.Event{"Baz", "2013-12-13 14:00", "2013-12-13 15:00", false},
 	}
 	// tasks = loadTasks(c.Txn.Select(models.Task{},
 	// 	`select * from Task limit ?`, size))
 
-	return c.RenderJson(tasks)
+	return c.RenderJson(events)
 }
 
 // func loadTasks(results []interface{}, err error) []*models.Task {
@@ -39,6 +39,7 @@ func (c Schedule) Show() revel.Result {
 //     panic(err)
 // }
 // csvReader := csv.NewReader(csvFile)
+// csvReader.TrailingComma = true
 // for {
 //     fields, err := csvReader.Read()
 //     if err == io.EOF {
@@ -48,3 +49,4 @@ func (c Schedule) Show() revel.Result {
 //     }
 //     // ... do stuff ...
 // }
+
