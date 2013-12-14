@@ -6,20 +6,7 @@ module:testrunner
 module:jobs
 
 GET     /                                       Application.Index
-GET     /hotels                                 Hotels.Index
-GET     /hotels/list                            Hotels.List
-GET     /hotels/:id                             Hotels.Show
-GET     /hotels/:id/booking                     Hotels.Book
-POST    /hotels/:id/booking                     Hotels.ConfirmBooking
-POST    /bookings/:id/cancel                    Hotels.CancelBooking
-GET     /register                               Application.Register
-POST    /register                               Application.SaveUser
-GET     /settings                               Hotels.Settings
-POST    /settings                               Hotels.SaveSettings
-POST    /login                                  Application.Login
-GET     /logout                                 Application.Logout
 
-GET		/schedule								Schedule.Show
 POST	/omnifocus_upload						Uploads.Create
 
 # Map static resources from the /app/public folder to the /public path
