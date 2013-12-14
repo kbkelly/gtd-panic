@@ -53,7 +53,6 @@ func readOmnifocusCsv(csvFile io.Reader) []*models.Event {
 	    }
     	event := &models.Event{}
     	event.Title = fields[2]
-    	event.AllDay = false
     	if len(fields) > 8 && fields[8] != "" {
     		log.Print(fields[8])
     		event.Duration, err = time.ParseDuration(fields[8])
