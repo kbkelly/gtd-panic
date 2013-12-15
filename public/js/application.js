@@ -20,9 +20,6 @@ gtdPanic.controller('UploadController', function($scope, $upload, $rootScope) {
 gtdPanic.controller('ScheduleController', function($scope) {
 	$scope.uiConfig = {
 		calendar: {
-			header: {
-				right: 'title'
-			},
 			defaultView: 'agendaDay'
 		}
 	};

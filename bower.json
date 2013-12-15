@@ -15,6 +15,7 @@
   ],
   "dependencies": {
     "angular-ui-calendar": "latest",
-    "ng-file-upload": "latest"
+    "ng-file-upload": "latest",
+    "bootstrap": "latest"
   }
 }
