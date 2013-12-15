@@ -44,9 +44,18 @@ gtdPanic.controller('ScheduleController', function($scope) {
 		if (!allEvents) {
 			return;
 		}
+		var startTime = moment();
 		angular.forEach(allEvents, function(event) {
 			event.allDay = false;
 			event.editable = true;
+			event.start = startTime.unix();
+			if (event.duration > 0) {
+				startTime = startTime.add('seconds', event.duration);
+			} else {
+				startTime = startTime.add('minutes', 30);				
+			}
+			event.end = startTime.unix();
+			// console.log(event);
 			$scope.events.push(event);
 		});
 	});

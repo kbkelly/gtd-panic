@@ -55,22 +55,13 @@ func readOmnifocusCsv(csvFile io.Reader) []*models.Event {
     	event.Title = fields[2]
     	if len(fields) > 8 && fields[8] != "" {
     		log.Print(fields[8])
-    		event.Duration, err = time.ParseDuration(fields[8])
+    		duration, err := time.ParseDuration(fields[8])
     		if err != nil {
     			panic(err)
     		}
-    	} else {
-    		event.Duration = time.Duration(30) * time.Minute
+    		event.Duration = duration.Seconds()
     	}
     	events = append(events, event)	    	
-	}
-	// starting from now, place each event at 15 minute intervals
-	current := time.Now()
-	layout := "2006-01-02 15:04:05" // "Mon Jan 2 15:04:05 -0700 MST 2006"
-	for _, e := range events {
-		e.Start = current.Format(layout)
-		e.End = current.Add(e.Duration).Format(layout)
-		current = current.Add(e.Duration)
 	}
 	return events
 }
