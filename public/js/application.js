@@ -31,7 +31,6 @@ gtdPanic.controller('ScheduleController', function($scope) {
 				};
 				$scope.$apply(function() {
 					$scope.events.push(newEvent);
-			        $scope.calendar.fullCalendar('renderEvent', newEvent);
 				});
 			}
 		}
@@ -39,6 +38,7 @@ gtdPanic.controller('ScheduleController', function($scope) {
 
 	$scope.eventSources = [];
 	$scope.events = [];
+	$scope.eventSources.push($scope.events);
 
 	$scope.$watch('allEvents', function(allEvents) {
 		if (!allEvents) {
@@ -49,7 +49,6 @@ gtdPanic.controller('ScheduleController', function($scope) {
 			event.editable = true;
 			$scope.events.push(event);
 		});
-		$scope.eventSources.push($scope.events);
 	});
 
 	$scope.remove = function($index) {
