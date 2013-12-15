@@ -25,6 +25,7 @@ gtdPanic.controller('ScheduleController', function($scope) {
 	};
 
 	$scope.eventSources = [];
+	$scope.events = [];
 
 	$scope.$watch('allEvents', function(allEvents) {
 		if (!allEvents) {
@@ -33,11 +34,15 @@ gtdPanic.controller('ScheduleController', function($scope) {
 		angular.forEach(allEvents, function(event) {
 			event.allDay = false;
 			event.editable = true;
+			$scope.events.push(event);
 		});
-		$scope.events = allEvents;
-		var eventConfig = {
-			events: allEvents
-		};
-		$scope.eventSources.push(eventConfig);
+		// var eventConfig = {
+		// 	events: allEvents
+		// };
+		$scope.eventSources.push($scope.events);
 	});
+
+	$scope.remove = function($index) {
+		$scope.events.splice($index, 1);
+	}
 });
