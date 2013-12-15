@@ -16,6 +16,7 @@
   "dependencies": {
     "angular-ui-calendar": "latest",
     "ng-file-upload": "latest",
-    "bootstrap": "latest"
+    "bootstrap": "latest",
+    "momentjs": "~2.4.0"
   }
 }

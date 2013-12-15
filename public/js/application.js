@@ -20,7 +20,20 @@ gtdPanic.controller('UploadController', function($scope, $upload, $rootScope) {
 gtdPanic.controller('ScheduleController', function($scope) {
 	$scope.uiConfig = {
 		calendar: {
-			defaultView: 'agendaDay'
+			defaultView: 'agendaDay',
+			dayClick: function(date, allDay, jsEvent, view) {
+				var newEvent = {
+					title: 'New Event',
+					start: moment(date).unix(),
+					end: moment(date).add('minutes', 30).unix(),
+					allDay: false,
+					editable: true
+				};
+				$scope.$apply(function() {
+					$scope.events.push(newEvent);
+			        $scope.calendar.fullCalendar('renderEvent', newEvent);
+				});
+			}
 		}
 	};
 
@@ -36,9 +49,6 @@ gtdPanic.controller('ScheduleController', function($scope) {
 			event.editable = true;
 			$scope.events.push(event);
 		});
-		// var eventConfig = {
-		// 	events: allEvents
-		// };
 		$scope.eventSources.push($scope.events);
 	});
 
