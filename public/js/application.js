@@ -34,6 +34,7 @@ gtdPanic.controller('ScheduleController', function($scope) {
 			event.allDay = false;
 			event.editable = true;
 		});
+		$scope.events = allEvents;
 		var eventConfig = {
 			events: allEvents
 		};
