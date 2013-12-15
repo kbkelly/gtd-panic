@@ -21,6 +21,7 @@ gtdPanic.controller('ScheduleController', function($scope) {
 	$scope.uiConfig = {
 		calendar: {
 			defaultView: 'agendaDay',
+			firstHour: moment().hour(),
 			dayClick: function(date, allDay, jsEvent, view) {
 				var newEvent = {
 					title: 'New Event',
