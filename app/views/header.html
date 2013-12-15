@@ -30,7 +30,7 @@
       <div ng-controller="ScheduleController">
         <div class="row">
           <div class="col-md-2">
-            <li ng-repeat="e in events" class="ng-scope">
+            <li ng-repeat="e in events | orderBy:'start'" class="ng-scope">
               <div class="alert alert-info ng-binding">
                 <button class="close" ng-click="remove($index)">x</button>
                 <input ng-model="e.title" class="ng-pristine ng-valid"> - Start - Finish
