@@ -18,6 +18,23 @@ gtdPanic.controller('UploadController', function($scope, $upload, $rootScope) {
 });
 
 gtdPanic.controller('ScheduleController', function($scope) {
+	function shuffle(array) {
+	    var counter = array.length, temp, index;
+
+	    // While there are elements in the array
+	    while (counter--) {
+	        // Pick a random index
+	        index = (Math.random() * counter) | 0;
+
+	        // And swap the last element with it
+	        temp = array[counter];
+	        array[counter] = array[index];
+	        array[index] = temp;
+	    }
+
+	    return array;
+	}
+
 	$scope.uiConfig = {
 		calendar: {
 			defaultView: 'agendaDay',
@@ -46,6 +63,7 @@ gtdPanic.controller('ScheduleController', function($scope) {
 			return;
 		}
 		var startTime = moment();
+		allEvents = shuffle(allEvents);
 		angular.forEach(allEvents, function(event) {
 			event.allDay = false;
 			event.editable = true;
