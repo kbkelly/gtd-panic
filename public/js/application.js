@@ -64,7 +64,7 @@ gtdPanic.controller('ScheduleController', function($scope) {
 		}
 		var startTime = moment();
 		allEvents = shuffle(allEvents);
-		angular.forEach(allEvents, function(event) {
+		function setupEvent(event) {
 			event.allDay = false;
 			event.editable = true;
 			event.start = startTime.unix();
@@ -76,7 +76,8 @@ gtdPanic.controller('ScheduleController', function($scope) {
 			event.end = startTime.unix();
 			// console.log(event);
 			$scope.events.push(event);
-		});
+		}
+		angular.forEach(allEvents, setupEvent);
 	});
 
 	$scope.remove = function($index) {
