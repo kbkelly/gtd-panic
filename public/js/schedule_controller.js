@@ -44,7 +44,9 @@ gtdPanic.controller('ScheduleController', function($scope) {
 			return;
 		}
 		var startTime = moment();
-		allEvents = shuffle(allEvents);
+		if ($scope.uiConfig.randomize) {
+			allEvents = shuffle(allEvents);
+		}
 		function setupEvent(event) {
 			event.allDay = false;
 			event.editable = true;
