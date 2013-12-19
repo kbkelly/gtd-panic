@@ -18,6 +18,7 @@ gtdPanic.controller('ScheduleController', function($scope) {
 
 	$scope.uiConfig = {
 		defaultDuration: 30,
+		cutoffTime: 23,
 		calendar: {
 			defaultView: 'agendaDay',
 			firstHour: moment().hour(),
@@ -48,7 +49,11 @@ gtdPanic.controller('ScheduleController', function($scope) {
 		if ($scope.uiConfig.randomize) {
 			allEvents = shuffle(allEvents);
 		}
+		var endTime = moment({hour: $scope.uiConfig.cutoffTime});
 		function setupEvent(event) {
+			if (startTime.isAfter(endTime)) {
+				return;
+			}
 			event.allDay = false;
 			event.editable = true;
 			event.start = startTime.unix();

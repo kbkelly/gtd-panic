@@ -33,10 +33,20 @@
       <div ng-controller="ScheduleController">
         <div class="row">
           <label><input type="checkbox" ng-model="uiConfig.randomize">Randomize</label>
-          <select ng-model="uiConfig.defaultDuration">
-            <option value="15">15 minutes</option>
-            <option value="30">30 minutes</option>
-          </select>
+          <label for="defaultDuration">Default Event Duration
+            <select ng-model="uiConfig.defaultDuration" id="defaultDuration">
+              <option value="15">15 minutes</option>
+              <option value="30">30 minutes</option>
+            </select>
+          </label>
+          <label for="cutoff">Cutoff Time
+            <select ng-model="uiConfig.cutoffTime" id="cutoff">
+              <option value="20">8pm</option>
+              <option value="21">9pm</option>
+              <option value="22">10pm</option>
+              <option value="23">11pm</option>
+            </select>
+          </label>
         </div>
         <div class="row">
           <div class="col-md-2">
