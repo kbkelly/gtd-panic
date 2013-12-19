@@ -49,7 +49,7 @@
           </label>
         </div>
         <div class="row">
-          <div class="col-md-2">
+          <div class="col-md-3">
             <li ng-repeat="e in events | orderBy:'start'" class="ng-scope">
               <div class="alert alert-info ng-binding">
                 <button class="close" ng-click="remove($index)">x</button>
@@ -57,7 +57,7 @@
               </div>
             </li>
           </div>
-          <div class="col-md-10">
+          <div class="col-md-9">
             <div ng-model="eventSources" ui-calendar="uiConfig.calendar" calendar="calendar"></div>
           </div>
         </div>
