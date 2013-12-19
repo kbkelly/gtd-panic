@@ -157,6 +157,14 @@ form .buttons {
     margin-top: 20px;
 }
 
+.event-entry {
+    border-bottom: 1px solid lightblue;
+}
+
+.event-entry input {
+    width: 90%;
+}
+
 /** Footer **/
 
 #footer {

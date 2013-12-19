@@ -51,9 +51,9 @@
         <div class="row">
           <div class="col-md-3">
             <li ng-repeat="e in events | orderBy:'start'" class="ng-scope">
-              <div class="alert alert-info ng-binding">
+              <div class="alert event-entry ng-binding">
                 <button class="close" ng-click="remove($index)">x</button>
-                <input ng-model="e.title" class="ng-pristine ng-valid"> - Start - Finish
+                <input ng-model="e.title" class="ng-pristine ng-valid">
               </div>
             </li>
           </div>
