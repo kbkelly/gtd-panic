@@ -21,7 +21,7 @@ gtdPanic.controller('ScheduleController', function($scope) {
 		cutoffTime: 23,
 		calendar: {
 			defaultView: 'agendaDay',
-			firstHour: moment().hour(),
+			minTime: moment().hour(),
 			dayClick: function(date, allDay, jsEvent, view) {
 				var newEvent = {
 					title: 'New Event',
