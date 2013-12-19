@@ -33,6 +33,10 @@
       <div ng-controller="ScheduleController">
         <div class="row">
           <label><input type="checkbox" ng-model="uiConfig.randomize">Randomize</label>
+          <select ng-model="uiConfig.defaultDuration">
+            <option value="15">15 minutes</option>
+            <option value="30">30 minutes</option>
+          </select>
         </div>
         <div class="row">
           <div class="col-md-2">

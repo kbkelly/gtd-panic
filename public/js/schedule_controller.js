@@ -17,6 +17,7 @@ gtdPanic.controller('ScheduleController', function($scope) {
 	}
 
 	$scope.uiConfig = {
+		defaultDuration: 30,
 		calendar: {
 			defaultView: 'agendaDay',
 			firstHour: moment().hour(),
@@ -54,7 +55,7 @@ gtdPanic.controller('ScheduleController', function($scope) {
 			if (event.duration > 0) {
 				startTime = startTime.add('seconds', event.duration);
 			} else {
-				startTime = startTime.add('minutes', 30);				
+				startTime = startTime.add('minutes', $scope.uiConfig.defaultDuration);				
 			}
 			event.end = startTime.unix();
 			// console.log(event);
