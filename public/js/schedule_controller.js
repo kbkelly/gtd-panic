@@ -45,18 +45,14 @@ gtdPanic.controller('ScheduleController', function($scope) {
 		if (!allEvents) {
 			return;
 		}
-		var startTime = moment();
 		if ($scope.uiConfig.randomize) {
 			allEvents = shuffle(allEvents);
 		}
-		var endTime = moment({hour: $scope.uiConfig.cutoffTime});
-		function setupEvent(event) {
-			// Skip events after the cutoff
-			if (startTime.isAfter(endTime)) {
-				return;
-			}
 
-			// Event duration
+		var startTime = moment();
+		var endTime = moment({hour: $scope.uiConfig.cutoffTime});
+
+		function setupEventDuration(event) {
 			event.start = startTime.unix();
 			if (event.duration > 0) {
 				startTime = startTime.add('seconds', event.duration);
@@ -64,6 +60,14 @@ gtdPanic.controller('ScheduleController', function($scope) {
 				startTime = startTime.add('minutes', $scope.uiConfig.defaultDuration);				
 			}
 			event.end = startTime.unix();
+		}
+		
+		function setupEvent(event) {
+			// Skip events after the cutoff
+			if (startTime.isAfter(endTime)) {
+				return;
+			}
+			setupEventDuration(event);
 
 			// console.log(event);
 			$scope.events.push(event);
