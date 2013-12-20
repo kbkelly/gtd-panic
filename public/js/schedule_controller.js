@@ -28,9 +28,7 @@ gtdPanic.controller('ScheduleController', function($scope) {
 				var newEvent = {
 					title: 'New Event',
 					start: moment(date).unix(),
-					end: moment(date).add('minutes', 30).unix(),
-					allDay: false,
-					editable: true
+					end: moment(date).add('minutes', 30).unix()
 				};
 				$scope.$apply(function() {
 					$scope.events.push(newEvent);
