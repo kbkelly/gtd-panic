@@ -20,6 +20,8 @@ gtdPanic.controller('ScheduleController', function($scope) {
 		defaultDuration: 30,
 		cutoffTime: 23,
 		calendar: {
+			allDayDefault: false,
+			editable: true,
 			defaultView: 'agendaDay',
 			minTime: moment().hour(),
 			dayClick: function(date, allDay, jsEvent, view) {
@@ -51,11 +53,12 @@ gtdPanic.controller('ScheduleController', function($scope) {
 		}
 		var endTime = moment({hour: $scope.uiConfig.cutoffTime});
 		function setupEvent(event) {
+			// Skip events after the cutoff
 			if (startTime.isAfter(endTime)) {
 				return;
 			}
-			event.allDay = false;
-			event.editable = true;
+
+			// Event duration
 			event.start = startTime.unix();
 			if (event.duration > 0) {
 				startTime = startTime.add('seconds', event.duration);
@@ -63,6 +66,7 @@ gtdPanic.controller('ScheduleController', function($scope) {
 				startTime = startTime.add('minutes', $scope.uiConfig.defaultDuration);				
 			}
 			event.end = startTime.unix();
+
 			// console.log(event);
 			$scope.events.push(event);
 		}
