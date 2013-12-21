@@ -34,39 +34,80 @@ gtdPanic.controller('ScheduleController', function($scope) {
 					$scope.events.push(newEvent);
 				});
 			},
-			// TODO: Add event for dragging
+			eventDrop: function(event, dayDelta, minuteDelta) {
+				function moveEvent(event) {
+					// When moving an event,
+					//	insert the event into the right place in the list (original index & new index)
+					//		if +delta (event moved forward)
+					//			move all events between original and new index backwards by event's duration
+					//		if -delta
+					//			move all events between original and new index forwards by event's duration
+					// 	all events after the event should be moved forward by the 
+					var index = $scope.events.indexOf(event);
+					// Assume that events are sorted by start time
+
+					// Remove the event and add it back in the right place
+					$scope.events.splice(index, 1);
+					
+					// Find the event that is immediately following this moved event's new time
+					var eventStart = moment(event.start);
+					var firstAfter = _.find($scope.events, function(otherEvent) {
+						var otherEventStart = moment(otherEvent.start);
+						if (eventStart.isSame(otherEventStart) || otherEventStart.isAfter(eventStart)) {
+							return otherEvent;
+						}
+					});
+					var firstAfterIndex = $scope.events.indexOf(firstAfter);
+
+					$scope.events = $scope.events.slice(0, firstAfterIndex).concat(event, $scope.events.slice(firstAfterIndex));
+					if (minuteDelta > 1) {
+						// Move all events between the old and new location back by X minutes
+						var eventsToMove = $scope.events.slice(index, firstAfterIndex + 1);
+						angular.forEach(eventsToMove, function(movingEvent) {
+							var newStart = moment(movingEvent.start).subtract('seconds', event.duration);
+							var newEnd = moment(movingEvent.end).subtract('seconds', event.duration);
+							movingEvent.start = newStart.unix();
+							movingEvent.end = newEnd.unix();
+							console.log('Moved "' + movingEvent.title + '" to start:', newStart.toString(), ' end: ', newEnd.toString());
+						});
+					} else {
+						// Move those events forward by X minutes
+					}					
+				}
+				$scope.$apply(function() {
+					moveEvent(event);
+				});
+			},
+			// TODO: Add event for dragging (resort the events in the list)
 			eventResize: function(event,dayDelta,minuteDelta,revertFunc) {
 				// Change the duration of this event and fix the start/end times for all events after this one
-				event.duration = event.duration + minuteDelta * 60;
-				// Now iterate over all events and set their dates accordingly
-				var index = $scope.events.indexOf(event);
+				var secondsDelta = minuteDelta * 60;
 				$scope.$apply(function() {
-					sortEventsAfter(index);
+					event.duration = event.duration + secondsDelta;
+					event.end = event.end + (event.duration * 1000);
+					// Now iterate over all events and set their dates accordingly
+					var index = $scope.events.indexOf(event);
+					moveEventsAfter(index);
 				});
-				function sortEventsAfter(index) {
-					var events = $scope.events;
-					var comparator = function(eventA, eventB) {
-						var startA = moment(eventA.start);
-						var startB = moment(eventB.start);
-						if (startA.isBefore(startB)) {
-							return -1;
-						} else if (startA.isAfter(startB)) {
-							return 1;
-						} else {
-							return 0;
-						}
-					}
-					$scope.events = events.slice(0, index).sort(comparator).concat(events.slice(index));
-
-					// debugger;
-					var startTime = moment($scope.events[index].start);
-					for (var i = index; i < $scope.events.length; i++) {
-						var event = $scope.events[i];
-						// DUPLICATED
-						event.start = startTime.unix();
-						startTime = startTime.add('seconds', event.duration);
-						event.end = startTime.unix();
+				function moveEventsAfter(index) {
+					// var comparator = function(eventA, eventB) {
+					// 	var startA = moment(eventA.start);
+					// 	var startB = moment(eventB.start);
+					// 	if (startA.isBefore(startB)) {
+					// 		return -1;
+					// 	} else if (startA.isAfter(startB)) {
+					// 		return 1;
+					// 	} else {
+					// 		return 0;
+					// 	}
+					// }
+					// $scope.events = events.slice(0, index).sort(comparator).concat(events.slice(index));
+					for (var i = index + 1; i < $scope.events.length; i++) {
+						var eventToMove = $scope.events[i];
+						eventToMove.start = moment(eventToMove.start).add('seconds', secondsDelta).unix();
+						eventToMove.end = moment(eventToMove.end).add('seconds', secondsDelta).unix();
 					};
+
 				}
 			}
 		}

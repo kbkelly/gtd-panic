@@ -17,6 +17,7 @@
     "angular-ui-calendar": "latest",
     "ng-file-upload": "latest",
     "bootstrap": "latest",
-    "momentjs": "~2.4.0"
+    "momentjs": "~2.4.0",
+    "underscore": "~1.5.2"
   }
 }
