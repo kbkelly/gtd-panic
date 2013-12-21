@@ -62,7 +62,10 @@ gtdPanic.controller('ScheduleController', function($scope) {
 					$scope.events = $scope.events.slice(0, firstAfterIndex).concat(event, $scope.events.slice(firstAfterIndex));
 					if (minuteDelta > 1) {
 						// Move all events between the old and new location back by X minutes
-						var eventsToMove = $scope.events.slice(index, firstAfterIndex + 1);
+						var eventsToMove = $scope.events.slice(index, firstAfterIndex);
+						// Also move the event that was at the new location to right behind the newly moved event
+						eventsToMove.push($scope.events[firstAfterIndex + 1]);
+
 						angular.forEach(eventsToMove, function(movingEvent) {
 							var newStart = moment(movingEvent.start).subtract('seconds', event.duration);
 							var newEnd = moment(movingEvent.end).subtract('seconds', event.duration);
