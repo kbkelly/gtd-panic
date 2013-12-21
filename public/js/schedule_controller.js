@@ -33,6 +33,41 @@ gtdPanic.controller('ScheduleController', function($scope) {
 				$scope.$apply(function() {
 					$scope.events.push(newEvent);
 				});
+			},
+			// TODO: Add event for dragging
+			eventResize: function(event,dayDelta,minuteDelta,revertFunc) {
+				// Change the duration of this event and fix the start/end times for all events after this one
+				event.duration = event.duration + minuteDelta * 60;
+				// Now iterate over all events and set their dates accordingly
+				var index = $scope.events.indexOf(event);
+				$scope.$apply(function() {
+					sortEventsAfter(index);
+				});
+				function sortEventsAfter(index) {
+					var events = $scope.events;
+					var comparator = function(eventA, eventB) {
+						var startA = moment(eventA.start);
+						var startB = moment(eventB.start);
+						if (startA.isBefore(startB)) {
+							return -1;
+						} else if (startA.isAfter(startB)) {
+							return 1;
+						} else {
+							return 0;
+						}
+					}
+					$scope.events = events.slice(0, index).sort(comparator).concat(events.slice(index));
+
+					// debugger;
+					var startTime = moment($scope.events[index].start);
+					for (var i = index; i < $scope.events.length; i++) {
+						var event = $scope.events[i];
+						// DUPLICATED
+						event.start = startTime.unix();
+						startTime = startTime.add('seconds', event.duration);
+						event.end = startTime.unix();
+					};
+				}
 			}
 		}
 	};
@@ -53,12 +88,13 @@ gtdPanic.controller('ScheduleController', function($scope) {
 		var endTime = moment({hour: $scope.uiConfig.cutoffTime});
 
 		function setupEventDuration(event) {
-			event.start = startTime.unix();
-			if (event.duration > 0) {
-				startTime = startTime.add('seconds', event.duration);
-			} else {
-				startTime = startTime.add('minutes', $scope.uiConfig.defaultDuration);				
+			// Duration is in seconds for some reason
+			if (!event.duration) {
+				event.duration = $scope.uiConfig.defaultDuration * 60;
 			}
+
+			event.start = startTime.unix();
+			startTime = startTime.add('seconds', event.duration);
 			event.end = startTime.unix();
 		}
 		
