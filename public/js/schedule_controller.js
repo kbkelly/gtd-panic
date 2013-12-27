@@ -43,38 +43,65 @@ gtdPanic.controller('ScheduleController', function($scope) {
 					//		if -delta
 					//			move all events between original and new index forwards by event's duration
 					// 	all events after the event should be moved forward by the 
-					var index = $scope.events.indexOf(event);
-					// Assume that events are sorted by start time
+					function moveEventWithinList(event) {
+						var index = $scope.events.indexOf(event);
+						// Assume that events are sorted by start time
 
-					// Remove the event and add it back in the right place
-					$scope.events.splice(index, 1);
-					
-					// Find the event that is immediately following this moved event's new time
-					var eventStart = moment(event.start);
-					var firstAfter = _.find($scope.events, function(otherEvent) {
-						var otherEventStart = moment(otherEvent.start);
-						if (eventStart.isSame(otherEventStart) || otherEventStart.isAfter(eventStart)) {
-							return otherEvent;
-						}
-					});
-					var firstAfterIndex = $scope.events.indexOf(firstAfter);
-
-					$scope.events = $scope.events.slice(0, firstAfterIndex).concat(event, $scope.events.slice(firstAfterIndex));
-					if (minuteDelta > 1) {
-						// Move all events between the old and new location back by X minutes
-						var eventsToMove = $scope.events.slice(index, firstAfterIndex);
-						// Also move the event that was at the new location to right behind the newly moved event
-						eventsToMove.push($scope.events[firstAfterIndex + 1]);
-
-						angular.forEach(eventsToMove, function(movingEvent) {
-							var newStart = moment(movingEvent.start).subtract('seconds', event.duration);
-							var newEnd = moment(movingEvent.end).subtract('seconds', event.duration);
-							movingEvent.start = newStart.unix();
-							movingEvent.end = newEnd.unix();
-							console.log('Moved "' + movingEvent.title + '" to start:', newStart.toString(), ' end: ', newEnd.toString());
+						// Remove the event and add it back in the right place
+						$scope.events.splice(index, 1);
+						
+						// Find the event that is immediately following this moved event's new time
+						var eventStart = moment(event.start);
+						var firstAfter = _.find($scope.events, function(otherEvent) {
+							var otherEventStart = moment(otherEvent.start);
+							if (eventStart.isSame(otherEventStart) || otherEventStart.isAfter(eventStart)) {
+								return otherEvent;
+							}
 						});
+						var firstAfterIndex = $scope.events.indexOf(firstAfter);
+
+						$scope.events = $scope.events.slice(0, firstAfterIndex).concat(event, $scope.events.slice(firstAfterIndex));						
+					}
+
+					moveEventWithinList(event);					
+					var secondDelta = (minuteDelta * 60);
+					var newStartTime = moment(event.start).unix();
+					var oldStartTime = newStartTime - secondDelta;
+					var newEndTime = moment(event.end).unix();
+					function moveDisplacedEvents(moveForward) {
+						// Need to displace some existing events
+						angular.forEach($scope.events, function(movingEvent) {
+							if (movingEvent === event) {
+								return;
+							}
+							movingEventStart = moment(movingEvent.start).unix();
+							movingEventEnd = moment(movingEvent.end).unix();
+							console.log(
+								moment.unix(oldStartTime).toString(), 
+								moment.unix(movingEventStart).toString(),
+								moment.unix(movingEventEnd).toString(),
+								moment.unix(newEndTime).toString()
+								);
+							if (moveForward) {
+								// Between new start time and old start time
+								if (movingEventStart >= newStartTime && movingEventEnd <= oldStartTime) {
+									console.log(movingEvent.title, "is displaced and moved back by ", event.duration, "seconds"); 
+									movingEvent.start = movingEventStart + event.duration;
+									movingEvent.end = movingEventEnd + event.duration;									
+								}
+							} else {
+								if (movingEventStart >= oldStartTime && movingEventEnd <= newEndTime) {
+									console.log(movingEvent.title, "is displaced and moved back by ", event.duration, "seconds"); 
+									movingEvent.start = movingEventStart - event.duration;
+									movingEvent.end = movingEventEnd - event.duration;
+								}								
+							}
+						});						
+					}
+					if (minuteDelta > 1) {
+						moveDisplacedEvents(false);
 					} else {
-						// Move those events forward by X minutes
+						moveDisplacedEvents(true);
 					}					
 				}
 				$scope.$apply(function() {
