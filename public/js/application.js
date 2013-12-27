@@ -1,1 +1,4 @@
-var gtdPanic = angular.module('GtdPanic', ['ui.calendar', 'angularFileUpload']);
+var gtdPanic = angular.module('GtdPanic', ['ui.calendar', 'angularFileUpload'], function($interpolateProvider) {
+    $interpolateProvider.startSymbol('[[');
+    $interpolateProvider.endSymbol(']]');
+});

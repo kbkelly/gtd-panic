@@ -55,6 +55,8 @@
               <div class="alert event-entry ng-binding">
                 <button class="close" ng-click="remove($index)">x</button>
                 <input ng-model="e.title" class="ng-pristine ng-valid">
+                <span class="start">[[e.start | date:'hh:mm']]</span>-
+                <span class="end">[[e.end | date:'hh:mm']]</span>
               </div>
             </li>
           </div>
