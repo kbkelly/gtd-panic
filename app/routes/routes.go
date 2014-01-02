@@ -98,6 +98,15 @@ func (_ tSchedules) Create(
 	return revel.MainRouter.Reverse("Schedules.Create", args).Url
 }
 
+func (_ tSchedules) Show(
+		id int,
+		) string {
+	args := make(map[string]string)
+	
+	revel.Unbind(args, "id", id)
+	return revel.MainRouter.Reverse("Schedules.Show", args).Url
+}
+
 
 type tUploads struct {}
 var Uploads tUploads

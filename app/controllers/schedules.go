@@ -31,6 +31,8 @@ func Init() {
 		"End": 24,
 	})
 
+	Dbm.AddTable(models.Schedule{}).SetKeys(true, "Id")
+
 	Dbm.TraceOn("[gorp]", rev.INFO)
 	err := Dbm.CreateTablesIfNotExists()
 	if err != nil {
@@ -49,15 +51,31 @@ func (c Schedules) Create() rev.Result {
 	if err != nil {
 		rev.ERROR.Println(err)
 	}
-	saveEvents(events)
+	schedule := createSchedule(events)
+	return c.Redirect("/schedules/%d", schedule.Id)
+}
+
+func (c Schedules) Show(id int) rev.Result {
+	Init()
+	events, err := Dbm.Select(models.Event{}, "SELECT * FROM Event where ScheduleId = ?", id)
+	if err != nil {
+		panic(err)
+	}
 	return c.RenderJson(events)
 }
 
-func saveEvents(events []*models.Event) {
+func createSchedule(events []*models.Event) *models.Schedule {
+	schedule := &models.Schedule{}
+	err := Dbm.Insert(schedule)
+	if err != nil {
+		panic(err)
+	}
 	for _, event := range events {
+		event.ScheduleId = schedule.Id
 		err := Dbm.Insert(event)
 		if err != nil {
 			panic(err)
 		}
 	}
+	return schedule
 }

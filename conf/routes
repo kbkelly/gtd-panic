@@ -9,6 +9,7 @@ GET     /                                       Application.Index
 
 POST	/omnifocus_upload						Uploads.Create
 POST	/schedules								Schedules.Create
+GET		/schedules/:id 							Schedules.Show
 
 # Map static resources from the /app/public folder to the /public path
 GET     /public/*filepath                       Static.Serve("public")
