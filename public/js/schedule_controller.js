@@ -1,4 +1,4 @@
-gtdPanic.controller('ScheduleController', function($scope) {
+gtdPanic.controller('ScheduleController', function($scope, $http) {
 	function shuffle(array) {
 	    var counter = array.length, temp, index;
 
@@ -185,4 +185,8 @@ gtdPanic.controller('ScheduleController', function($scope) {
 	$scope.remove = function($index) {
 		$scope.events.splice($index, 1);
 	}
+
+	$scope.save = function() {
+		$http.post('/schedules', $scope.events);
+	};
 });
