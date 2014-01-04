@@ -29,6 +29,39 @@ describe('ScheduleController', function() {
 		expect(scope.eventSources[0]).toEqual(events);
 	});
 
+	it('allows events to have a predefined duration', function() {
+		var events = [
+			{title: 'first event', duration: 3600},
+			{title: 'second event'}
+		];
+		// Inject the events
+		scope.allEvents = events;
+		scope.$apply();
+
+		expect(events[0].end).toEqual(events[0].start + 3600);
+	});
+
+	it('can remove events', function() {
+		scope.events = [
+			{title: 'removed event'},
+			{title: 'remaining event'}
+		];
+		scope.remove(0);
+		expect(scope.events.length).toEqual(1);
+		expect(scope.events[0].title).toEqual('remaining event');
+	});
+
+	it('can save events', inject(function($httpBackend) {
+		scope.events = [
+			{title: 'saved event'}
+		];
+		$httpBackend.expectPOST('/schedules', scope.events).respond(200);
+		scope.save();
+		$httpBackend.flush();
+		$httpBackend.verifyNoOutstandingExpectation();
+	}));
+
+	// Test cutoff time
 	// Test randomize events
 	// Test dayClick
 	// Test eventDrop
