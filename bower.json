@@ -18,6 +18,8 @@
     "ng-file-upload": "latest",
     "bootstrap": "latest",
     "momentjs": "~2.4.0",
-    "underscore": "~1.5.2"
+    "underscore": "~1.5.2",
+    "angular": "~1.2.7",
+    "angular-mocks": "~1.2.7"
   }
 }
