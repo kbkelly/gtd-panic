@@ -108,7 +108,6 @@ gtdPanic.controller('ScheduleController', function($scope, $http) {
 					moveEvent(event);
 				});
 			},
-			// TODO: Add event for dragging (resort the events in the list)
 			eventResize: function(event,dayDelta,minuteDelta,revertFunc) {
 				// Change the duration of this event and fix the start/end times for all events after this one
 				var secondsDelta = minuteDelta * 60;
@@ -120,24 +119,11 @@ gtdPanic.controller('ScheduleController', function($scope, $http) {
 					moveEventsAfter(index);
 				});
 				function moveEventsAfter(index) {
-					// var comparator = function(eventA, eventB) {
-					// 	var startA = moment(eventA.start);
-					// 	var startB = moment(eventB.start);
-					// 	if (startA.isBefore(startB)) {
-					// 		return -1;
-					// 	} else if (startA.isAfter(startB)) {
-					// 		return 1;
-					// 	} else {
-					// 		return 0;
-					// 	}
-					// }
-					// $scope.events = events.slice(0, index).sort(comparator).concat(events.slice(index));
 					for (var i = index + 1; i < $scope.events.length; i++) {
 						var eventToMove = $scope.events[i];
 						eventToMove.start = moment(eventToMove.start).add('seconds', secondsDelta).unix();
 						eventToMove.end = moment(eventToMove.end).add('seconds', secondsDelta).unix();
 					};
-
 				}
 			}
 		}
