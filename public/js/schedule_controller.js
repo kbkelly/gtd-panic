@@ -59,10 +59,8 @@ gtdPanic.controller('ScheduleController', function($scope, $http) {
 							}
 						});
 						var firstAfterIndex = $scope.events.indexOf(firstAfter);
-
 						$scope.events = $scope.events.slice(0, firstAfterIndex).concat(event, $scope.events.slice(firstAfterIndex));						
 					}
-
 					moveEventWithinList(event);					
 					var secondDelta = (minuteDelta * 60);
 					var newStartTime = moment(event.start).unix();
@@ -76,22 +74,14 @@ gtdPanic.controller('ScheduleController', function($scope, $http) {
 							}
 							movingEventStart = moment(movingEvent.start).unix();
 							movingEventEnd = moment(movingEvent.end).unix();
-							console.log(
-								moment.unix(oldStartTime).toString(), 
-								moment.unix(movingEventStart).toString(),
-								moment.unix(movingEventEnd).toString(),
-								moment.unix(newEndTime).toString()
-								);
 							if (moveForward) {
 								// Between new start time and old start time
 								if (movingEventStart >= newStartTime && movingEventEnd <= oldStartTime) {
-									console.log(movingEvent.title, "is displaced and moved back by ", event.duration, "seconds"); 
 									movingEvent.start = movingEventStart + event.duration;
 									movingEvent.end = movingEventEnd + event.duration;									
 								}
 							} else {
 								if (movingEventStart >= oldStartTime && movingEventEnd <= newEndTime) {
-									console.log(movingEvent.title, "is displaced and moved back by ", event.duration, "seconds"); 
 									movingEvent.start = movingEventStart - event.duration;
 									movingEvent.end = movingEventEnd - event.duration;
 								}								

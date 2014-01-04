@@ -61,9 +61,60 @@ describe('ScheduleController', function() {
 		$httpBackend.verifyNoOutstandingExpectation();
 	}));
 
+	describe('clicking anywhere on the calendar', function() {
+		it('creates a new event', function() {
+			expect(scope.events.length).toEqual(0);
+			var time = new Date();
+			scope.uiConfig.calendar.dayClick(time);
+			var startUnixTimestamp = moment(time).unix();
+			expect(scope.events[0].start).toEqual(startUnixTimestamp);
+			expect(scope.events[0].end).toEqual(startUnixTimestamp + 1800);
+		});
+	});
+
+	describe('dragging an event', function() {
+		beforeEach(function() {
+			scope.events = [
+				{
+					title: 'first event',
+					start: 120000,
+					end: 130000
+				},
+				// Twice as long
+				{
+					title: 'second event',
+					start: 130000,
+					end: 150000
+				},
+				// Has a gap between it and last event
+				{
+					title: 'third event',
+					start: 160000,
+					end: 170000
+				}
+			];
+		});
+
+		it('moves the event to the appropriate spot in the list', function() {
+			// Moved forward to the start of the 3rd event
+			var minuteDelta = (160000 - 120000) / 60;
+			var movedEvent = scope.events[0];
+			// Moved event is already updated by the time eventDrop() fires
+			movedEvent.start = 160000; 
+			scope.uiConfig.calendar.eventDrop(movedEvent, null, minuteDelta);
+			scope.$apply();
+			// Is currently moved to right before the 3rd event (may be bad)
+			expect(scope.events.indexOf(movedEvent)).toEqual(1);
+		});
+
+		it('displaces existing events');
+
+		it('can move events backwards in time');
+	});
+
+	// Test eventDrop
+	// Test eventResize
 	// Test cutoff time
 	// Test randomize events
-	// Test dayClick
-	// Test eventDrop
 
 });	
