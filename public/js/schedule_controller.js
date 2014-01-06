@@ -62,29 +62,36 @@ gtdPanic.controller('ScheduleController', function($scope, $http) {
 						$scope.events = $scope.events.slice(0, firstAfterIndex).concat(event, $scope.events.slice(firstAfterIndex));						
 					}
 					moveEventWithinList(event);					
-					var secondDelta = (minuteDelta * 60);
-					var newStartTime = moment(event.start).unix();
-					var oldStartTime = newStartTime - secondDelta;
-					var newEndTime = moment(event.end).unix();
+					var secondDelta = minuteDelta * 60;
+					var newStartTime = moment(event.start);
+					var oldStartTime = newStartTime.subtract('seconds', secondDelta);
+					var newEndTime = moment(event.end);
 					function moveDisplacedEvents(moveForward) {
 						// Need to displace some existing events
 						angular.forEach($scope.events, function(movingEvent) {
 							if (movingEvent === event) {
 								return;
 							}
-							movingEventStart = moment(movingEvent.start).unix();
-							movingEventEnd = moment(movingEvent.end).unix();
+							var movingEventStart = moment(movingEvent.start);
+							var movingEventEnd = moment(movingEvent.end);
 							if (moveForward) {
 								// Between new start time and old start time
-								if (movingEventStart >= newStartTime && movingEventEnd <= oldStartTime) {
+								if ((movingEventStart.isAfter(newStartTime) ||
+									 movingEventStart.isSame(newStartTime)) && 
+									(movingEventEnd.isBefore(oldStartTime) || 
+									 movingEventEnd.isSame(oldStartTime)))
+									{
 									movingEvent.start = movingEventStart + event.duration;
 									movingEvent.end = movingEventEnd + event.duration;									
 								}
 							} else {
-								if (movingEventStart >= oldStartTime && movingEventEnd <= newEndTime) {
-									movingEvent.start = movingEventStart - event.duration;
-									movingEvent.end = movingEventEnd - event.duration;
-								}								
+								if ((movingEventStart.isAfter(oldStartTime) ||
+									 movingEventStart.isSame(oldStartTime)) && 
+									(movingEventEnd.isBefore(newEndTime) || 
+									 movingEventEnd.isSame(newEndTime))) {
+									movingEvent.start = movingEventStart.subtract('seconds', event.duration).toDate();
+									movingEvent.end = movingEventEnd.subtract('seconds', event.duration).toDate();
+								}
 							}
 						});						
 					}
