@@ -1,0 +1,27 @@
+{
+  "name": "gtd-panic",
+  "version": "0.0.0",
+  "description": "GTD calendar arranger thing",
+  "main": "app.js",
+  "private": true,
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "start": "node app.js",
+    "test": "karma run"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/kbkelly/gtd-panic.git"
+  },
+  "author": "Kris Kelly",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/kbkelly/gtd-panic/issues"
+  },
+  "dependencies": {
+    "express": "~3.4.7",
+    "jade": "*"
+  }
+}
