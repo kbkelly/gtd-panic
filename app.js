@@ -6,6 +6,7 @@
 var express = require('express');
 var routes = require('./routes');
 var uploads = require('./routes/uploads');
+var schedules = require('./routes/schedules');
 var http = require('http');
 var path = require('path');
 
@@ -33,6 +34,7 @@ if ('development' == app.get('env')) {
 
 app.get('/', routes.index);
 app.post('/omnifocus_upload', uploads.create);
+app.post('/schedules', schedules.create);
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
