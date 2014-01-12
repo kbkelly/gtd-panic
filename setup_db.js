@@ -8,9 +8,9 @@ var db = new Sequelize('database', 'username', 'password', {
 });
 
 var Event = db.define('Event', {
-	Title: Sequelize.STRING,
-	Start: Sequelize.STRING,
-	End: Sequelize.STRING,
+	title: Sequelize.STRING,
+	start: Sequelize.STRING,
+	end: Sequelize.STRING,
 	ScheduleId: Sequelize.INTEGER
 });
 

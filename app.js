@@ -35,6 +35,7 @@ if ('development' == app.get('env')) {
 app.get('/', routes.index);
 app.post('/omnifocus_upload', uploads.create);
 app.post('/schedules', schedules.create);
+app.get('/schedules/:id', schedules.show);
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));

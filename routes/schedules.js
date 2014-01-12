@@ -9,9 +9,9 @@ var db = new Sequelize('database', 'username', 'password', {
 });
 
 var Event = db.define('Event', {
-	Title: Sequelize.STRING,
-	Start: Sequelize.STRING,
-	End: Sequelize.STRING,
+	title: Sequelize.STRING,
+	start: Sequelize.STRING,
+	end: Sequelize.STRING,
 	ScheduleId: Sequelize.INTEGER
 });
 
@@ -57,5 +57,10 @@ function saveEvents(eventsJson, done) {
 
 // Display a previously created schedule
 exports.show = function(req, res) {
-	
+  Event.findAll({where: {ScheduleId: req.params.id}}).complete(function(err, events) {
+    if (!!err) {
+      console.log('Find failed: ', err);
+    }
+    res.json(events);
+  }); 	
 }
