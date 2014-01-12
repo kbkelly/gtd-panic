@@ -41,10 +41,9 @@ exports.create = function(req, res){
 			return;
 		}
 
-		// TODO: Parse duration
 		var duration = null;
 		if (row.length > 8 && row[8] !== '') {
-
+			duration = durationToSeconds(row[8]);
 		}
 
 		return {
@@ -52,4 +51,13 @@ exports.create = function(req, res){
 			duration: duration
 		}
 	}	
+
+	function durationToSeconds(duration) {
+		var timeRegex = /(\d+)m/;
+		var matches = duration.match(timeRegex);
+		if (!matches) {
+			return;
+		}
+		return matches[1] * 60;
+	}
 };
