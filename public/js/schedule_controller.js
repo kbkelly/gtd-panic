@@ -109,17 +109,14 @@ gtdPanic.controller('ScheduleController', function($scope, $http) {
 				// Change the duration of this event and fix the start/end times for all events after this one
 				var secondsDelta = minuteDelta * 60;
 				$scope.$apply(function() {
-					event.duration = event.duration + secondsDelta;
-					event.end = event.end + (event.duration * 1000);
-					// Now iterate over all events and set their dates accordingly
 					var index = $scope.events.indexOf(event);
 					moveEventsAfter(index);
 				});
 				function moveEventsAfter(index) {
 					for (var i = index + 1; i < $scope.events.length; i++) {
 						var eventToMove = $scope.events[i];
-						eventToMove.start = moment(eventToMove.start).add('seconds', secondsDelta).unix();
-						eventToMove.end = moment(eventToMove.end).add('seconds', secondsDelta).unix();
+						eventToMove.start = moment(eventToMove.start).add('seconds', secondsDelta).toDate();
+						eventToMove.end = moment(eventToMove.end).add('seconds', secondsDelta).toDate();
 					};
 				}
 			}

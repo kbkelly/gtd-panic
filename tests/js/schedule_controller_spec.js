@@ -129,8 +129,29 @@ describe('ScheduleController', function() {
 		it('can move events backwards in time');
 	});
 
-	// Test eventDrop
-	// Test eventResize
+	describe('resizing an event', function() {
+		it('adjusts all events after the resized one', function() {
+			scope.events = [
+				{
+					title: 'first event',
+					start: new Date(2020, 3, 3, 12, 0, 0),
+					end: new Date(2020, 3, 3, 12, 30, 0),
+					duration: 1800
+				},
+				// Twice as long
+				{
+					title: 'second event',
+					start: new Date(2020, 3, 3, 12, 30, 0),
+					end: new Date(2020, 3, 3, 13, 30, 0),
+					duration: 3600
+				}
+			];
+			scope.uiConfig.calendar.eventResize(scope.events[0], null, 60);
+			expect(scope.events[1].start.getHours()).toEqual(13);
+			expect(scope.events[1].end.getHours()).toEqual(14);
+		});
+	});
+
 	// Test cutoff time
 	// Test randomize events
 
