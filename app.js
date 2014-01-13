@@ -14,6 +14,7 @@ var app = express();
 
 // all environments
 app.set('port', process.env.PORT || 3000);
+app.set('host', process.env.HOST || 'localhost');
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 app.use(express.favicon());
@@ -37,6 +38,6 @@ app.post('/omnifocus_upload', uploads.create);
 app.post('/schedules', schedules.create);
 app.get('/schedules/:id', schedules.show);
 
-http.createServer(app).listen(app.get('port'), function(){
+http.createServer(app).listen(app.get('port'), app.get('host'), function(){
   console.log('Express server listening on port ' + app.get('port'));
 });
