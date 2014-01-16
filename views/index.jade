@@ -42,7 +42,7 @@ html
               option(value='23') 11pm
           input(type='button', value='Save', ng-click='save()')
         .row
-          .col-md-3
+          .col-md-3.hidden-sm.hidden-xs
             li.ng-scope(ng-repeat='e in events | orderBy:"start"')
               .alert.event-entry.ng-binding
                 button.close(ng-click='remove($index)') x
