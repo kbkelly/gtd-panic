@@ -25,22 +25,23 @@ html
           input(type='file', name='csvUpload', ng-file-select='onSelectCsv($files)')
       div(ng-controller='ScheduleController')
         .row
-          label
-            input(type='checkbox', ng-model='uiConfig.randomize')
-            | Randomize
-          label(for='defaultDuration')
-            | Default Event Duration
-            select#defaultDuration(ng-model='uiConfig.defaultDuration')
-              option(value='15') 15 minutes
-              option(value='30') 30 minutes
-          label(for='cutoff')
-            | Cutoff Time
-            select#cutoff(ng-model='uiConfig.cutoffTime')
-              option(value='20') 8pm
-              option(value='21') 9pm
-              option(value='22') 10pm
-              option(value='23') 11pm
-          input(type='button', value='Save', ng-click='save()')
+          form
+            label
+              input(type='checkbox', ng-model='uiConfig.randomize')
+              | Randomize
+            label(for='defaultDuration')
+              | Default Event Duration
+              select#defaultDuration(ng-model='uiConfig.defaultDuration')
+                option(value='15') 15 minutes
+                option(value='30') 30 minutes
+            label(for='cutoff')
+              | Cutoff Time
+              select#cutoff(ng-model='uiConfig.cutoffTime')
+                option(value='20') 8pm
+                option(value='21') 9pm
+                option(value='22') 10pm
+                option(value='23') 11pm
+            input(type='button', value='Save', ng-click='save()')
         .row
           ul.col-md-3.hidden-sm.hidden-xs.event-list
             li.ng-scope(ng-repeat='e in events | orderBy:"start"')

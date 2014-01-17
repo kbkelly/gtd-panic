@@ -1,38 +1,7 @@
-html {
-    background: #e0e0e0;
-}
-
-body {
-    margin: 20px auto;
-    font-family: Arial;
-    font-size: 90%;
-    color: rgb(54, 47, 45);
-    background: #fff;
-    -webkit-border-radius: 8px;
-    -webkit-box-shadow: 0 0 10px rgba(0,0,0,.2);
-    -moz-border-radius: 8px;
-    -moz-box-shadow: 0 0 10px rgba(0,0,0,.2);
-}
-
 a {
     color: #666;
 }
 
-/** Main **/
-
-.fError, .fSuccess {
-    text-align: center;
-    position: relative;
-    top: -10px;
-}
-
-.fError {
-    color: #c00;
-}
-
-.fSuccess {
-    color: #0c0;
-}
 
 #content {
     padding: 20px;
