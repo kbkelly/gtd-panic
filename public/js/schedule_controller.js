@@ -171,6 +171,6 @@ gtdPanic.controller('ScheduleController', function($scope, $http, $date) {
 
 	$scope.clear = function() {
 		$scope.events.length = 0;
-		$scope.allEvents = [];
+		$scope.allEvents.length = 0;
 	}
 });
