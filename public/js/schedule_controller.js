@@ -168,4 +168,9 @@ gtdPanic.controller('ScheduleController', function($scope, $http, $date) {
 	$scope.save = function() {
 		$http.post('/schedules', $scope.events);
 	};
+
+	$scope.clear = function() {
+		$scope.events.length = 0;
+		$scope.allEvents = [];
+	}
 });

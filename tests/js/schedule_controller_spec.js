@@ -165,6 +165,18 @@ describe('ScheduleController', function() {
 		expect(scope.events.length).toEqual(2);
 	});
 
+	it('can clear the events', function() {
+		scope.events.push({
+			title: 'an event'
+		});
+		var oldEvents = scope.events;
+		scope.allEvents = scope.events;
+		scope.clear();
+		expect(scope.events === oldEvents).toBeTruthy();
+		expect(scope.events.length).toEqual(0);
+		expect(scope.allEvents.length).toEqual(0);
+	});
+
 	// Test cutoff time
 	// Test randomize events
 
