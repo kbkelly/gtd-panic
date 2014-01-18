@@ -1,10 +1,11 @@
 describe('ScheduleController', function() {
 	beforeEach(module('GtdPanic'));
 
-	var scope, controller;
+	var scope, controller, currentDate;
 	beforeEach(inject(function($rootScope, $controller) {
+		currentDate = new Date(2020, 3, 3, 9, 0, 0); // 9am
 		scope = $rootScope.$new();
-		controller = $controller('ScheduleController', {$scope:scope});
+		controller = $controller('ScheduleController', {$scope: scope, $date: currentDate});
 	}));
 
 	it('sets up the default calendar config', function() {
@@ -19,6 +20,7 @@ describe('ScheduleController', function() {
 		];
 		scope.allEvents = events;
 		scope.$apply();
+		expect(scope.events.length).toEqual(2);
 		expect(events[0].start).toBeDefined();
 		expect(events[0].end).toBeDefined();
 		// Default duration
@@ -150,6 +152,17 @@ describe('ScheduleController', function() {
 			expect(scope.events[1].start.getHours()).toEqual(13);
 			expect(scope.events[1].end.getHours()).toEqual(14);
 		});
+	});
+
+	it('allows a cutoff time to prevent events after a given time', function() {
+		scope.uiConfig.cutoffTime = 10;
+		scope.allEvents = [
+			{title: 'first'},
+			{title: 'second'},
+			{title: 'past cutoff'}
+		];
+		scope.$apply();
+		expect(scope.events.length).toEqual(2);
 	});
 
 	// Test cutoff time

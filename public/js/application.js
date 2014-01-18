@@ -2,3 +2,7 @@ var gtdPanic = angular.module('GtdPanic', ['ui.calendar', 'angularFileUpload'], 
     $interpolateProvider.startSymbol('[[');
     $interpolateProvider.endSymbol(']]');
 });
+
+angular.module('GtdPanic').service('$date', function() {
+    return new Date();
+});

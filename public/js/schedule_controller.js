@@ -1,4 +1,4 @@
-gtdPanic.controller('ScheduleController', function($scope, $http) {
+gtdPanic.controller('ScheduleController', function($scope, $http, $date) {
 	function shuffle(array) {
 	    var counter = array.length, temp, index;
 
@@ -23,7 +23,7 @@ gtdPanic.controller('ScheduleController', function($scope, $http) {
 			allDayDefault: false,
 			editable: true,
 			defaultView: 'agendaDay',
-			minTime: moment().hour(),
+			minTime: moment($date).hour(),
 			dayClick: function(date, allDay, jsEvent, view) {
 				var newEvent = {
 					title: 'New Event',
@@ -135,8 +135,7 @@ gtdPanic.controller('ScheduleController', function($scope, $http) {
 			allEvents = shuffle(allEvents);
 		}
 
-		var startTime = moment();
-		var endTime = moment({hour: $scope.uiConfig.cutoffTime});
+		var startTime = moment($date);
 
 		function setupEventDuration(event) {
 			// Duration is in seconds for some reason
@@ -151,7 +150,7 @@ gtdPanic.controller('ScheduleController', function($scope, $http) {
 		
 		function setupEvent(event) {
 			// Skip events after the cutoff
-			if (startTime.isAfter(endTime)) {
+			if (startTime.hour() >= $scope.uiConfig.cutoffTime) {
 				return;
 			}
 			setupEventDuration(event);
