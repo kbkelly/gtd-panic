@@ -25,7 +25,7 @@ html
           input(type='file', name='csvUpload', ng-file-select='onSelectCsv($files)')
       div(ng-controller='ScheduleController')
         .row
-          form
+          form.form-inline
             label
               input(type='checkbox', ng-model='uiConfig.randomize')
               | Randomize
