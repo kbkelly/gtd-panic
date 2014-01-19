@@ -1,8 +1,23 @@
-var gtdPanic = angular.module('GtdPanic', ['ui.calendar', 'angularFileUpload'], function($interpolateProvider) {
+var gtdPanic = angular.module('GtdPanic', [
+    'ui.calendar',
+    'ui.router',
+    'angularFileUpload'
+    ], 
+    function($interpolateProvider) {
     $interpolateProvider.startSymbol('[[');
     $interpolateProvider.endSymbol(']]');
 });
 
-angular.module('GtdPanic').service('$date', function() {
+gtdPanic.service('$date', function() {
     return new Date();
+});
+
+gtdPanic.config(function($stateProvider, $urlRouterProvider) {
+    $urlRouterProvider.otherwise('/');
+
+    $stateProvider
+        .state('home', {
+            url: '/',
+            templateUrl: 'home.html'
+        });
 });

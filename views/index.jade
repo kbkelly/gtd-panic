@@ -10,6 +10,7 @@ html
     script(type='text/javascript', src='/components/jquery-ui/ui/jquery-ui.js')
     script(type='text/javascript', src='/components/angular/angular.js')
     script(type='text/javascript', src='/components/angular-ui-calendar/src/calendar.js')
+    script(type='text/javascript', src='/vendor/angular-ui-router.js')
     script(type='text/javascript', src='/components/fullcalendar/fullcalendar.js')
     script(type='text/javascript', src='/components/fullcalendar/gcal.js')
     script(type='text/javascript', src='/components/ng-file-upload/angular-file-upload.js')
@@ -20,37 +21,5 @@ html
     script(type='text/javascript', src='/js/schedule_controller.js')
   body
     #content(ng-app='GtdPanic')
-      .row
-        div(ng-controller='UploadController')
-          input(type='file', name='csvUpload', ng-file-select='onSelectCsv($files)')
-      div(ng-controller='ScheduleController')
-        .row
-          form.form-inline
-            label
-              input(type='checkbox', ng-model='uiConfig.randomize')
-              | Randomize
-            label(for='defaultDuration')
-              | Default Event Duration
-              select#defaultDuration(ng-model='uiConfig.defaultDuration')
-                option(value='15') 15 minutes
-                option(value='30') 30 minutes
-            label(for='cutoff')
-              | Cutoff Time
-              select#cutoff(ng-model='uiConfig.cutoffTime')
-                option(value='20') 8pm
-                option(value='21') 9pm
-                option(value='22') 10pm
-                option(value='23') 11pm
-            input(type='button', value='Save', ng-click='save()')
-            input(type='button', value='Clear', ng-click='clear()')
-        .row
-          ul.col-md-3.hidden-sm.hidden-xs.event-list
-            li.ng-scope(ng-repeat='e in events | orderBy:"start"')
-              .alert.event-entry.ng-binding
-                button.close(ng-click='remove($index)') x
-                input.ng-pristine.ng-valid(type='text', ng-model='e.title')
-                span.start &lsqb;&lsqb;e&period;start &VerticalLine; date&colon;&apos;hh&colon;mm&apos;&rsqb;&rsqb;
-                | -
-                span.end &lsqb;&lsqb;e&period;end &VerticalLine; date&colon;&apos;hh&colon;mm&apos;&rsqb;&rsqb;
-          .col-md-9
-            div(ng-model='eventSources', ui-calendar='uiConfig.calendar', calendar='calendar')
+      include partials/home
+      div(ui-view)

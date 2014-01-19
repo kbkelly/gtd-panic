@@ -181,7 +181,6 @@ describe('ScheduleController', function() {
 		expect(scope.allEvents.length).toEqual(0);
 	});
 
-	// Test cutoff time
 	// Test randomize events
 
 });	
