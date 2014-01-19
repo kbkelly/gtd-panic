@@ -25,7 +25,7 @@ app.use(express.methodOverride());
 app.use(express.cookieParser('your secret here'));
 app.use(express.session());
 app.use(express.bodyParser());
-app.use(app.router);
+
 app.use(express.static(path.join(__dirname, 'public')));
 
 // development only
@@ -36,6 +36,7 @@ if ('development' == app.get('env')) {
 app.get('/', routes.index);
 app.post('/omnifocus_upload', uploads.create);
 app.post('/schedules', schedules.create);
+app.get('/schedules/today', schedules.today);
 app.get('/schedules/:id', schedules.show);
 
 http.createServer(app).listen(app.get('port'), function(){

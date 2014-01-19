@@ -5,7 +5,19 @@ describe('ScheduleController', function() {
 	beforeEach(inject(function($rootScope, $controller) {
 		currentDate = new Date(2020, 3, 3, 9, 0, 0); // 9am
 		scope = $rootScope.$new();
-		controller = $controller('ScheduleController', {$scope: scope, $date: currentDate});
+		controller = $controller('ScheduleController', {
+			$scope: scope,
+			$date: currentDate,
+			savedEvents: []
+		});
+	}));
+
+	it('injects previously saved events into the calendar', inject(function($controller) {
+		var events = [
+			{title: 'first saved event'}
+		];
+		$controller('ScheduleController', {$scope: scope, savedEvents: events});
+		expect(scope.events.length).toEqual(1);
 	}));
 
 	it('sets up the default calendar config', function() {
@@ -61,6 +73,31 @@ describe('ScheduleController', function() {
 		scope.save();
 		$httpBackend.flush();
 		$httpBackend.verifyNoOutstandingExpectation();
+	}));
+
+	it('saving only serializes relevant object properties', inject(function($httpBackend) {
+		// Don't want to send sequelize objects back to the server
+		scope.events = [ {
+			title: 'send me back',
+			start: 'foo',
+			end: 'bar',
+			id: 123,
+			ScheduleId: 456,
+			source: {another: 'object'},
+			__uiCalId: 'whatever'
+		}];
+		var expectedPostData = [
+			{
+				title: 'send me back',
+				start: 'foo',
+				end: 'bar',
+				id: 123,
+				ScheduleId: 456
+			}
+		];
+		$httpBackend.expectPOST('/schedules', expectedPostData).respond(200);
+		scope.save();
+		$httpBackend.flush();
 	}));
 
 	describe('clicking anywhere on the calendar', function() {
@@ -179,6 +216,18 @@ describe('ScheduleController', function() {
 		expect(scope.allEvents === oldAllEvents).toBeTruthy();
 		expect(scope.events.length).toEqual(0);
 		expect(scope.allEvents.length).toEqual(0);
+	});
+
+	it('can clear events even if none have been loaded from csv', function() {
+		scope.events.push({
+			title: 'an event'
+		});
+		var oldEvents = scope.events;
+
+		scope.clear();
+		// angular requires maintaining object references
+		expect(scope.events === oldEvents).toBeTruthy();
+		expect(scope.events.length).toEqual(0);
 	});
 
 	// Test randomize events

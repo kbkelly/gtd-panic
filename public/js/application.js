@@ -18,6 +18,14 @@ gtdPanic.config(function($stateProvider, $urlRouterProvider) {
     $stateProvider
         .state('home', {
             url: '/',
-            templateUrl: 'home.html'
+            templateUrl: 'home.html',
+            controller: 'ScheduleController',
+            resolve: {
+                savedEvents: function($http) {
+                    return $http.get('/schedules/today').then(function(response) {
+                        return response.data;
+                    });
+                }
+            }
         });
 });

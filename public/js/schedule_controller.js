@@ -1,4 +1,4 @@
-gtdPanic.controller('ScheduleController', function($scope, $http, $date) {
+gtdPanic.controller('ScheduleController', function($scope, $http, $date, savedEvents) {
 	function shuffle(array) {
 	    var counter = array.length, temp, index;
 
@@ -127,6 +127,10 @@ gtdPanic.controller('ScheduleController', function($scope, $http, $date) {
 	$scope.events = [];
 	$scope.eventSources.push($scope.events);
 
+	if (savedEvents.length) {
+		$scope.events.push.apply($scope.events, savedEvents);
+	}
+
 	$scope.$watch('allEvents', function(allEvents) {
 		if (!allEvents) {
 			return;
@@ -166,11 +170,22 @@ gtdPanic.controller('ScheduleController', function($scope, $http, $date) {
 	}
 
 	$scope.save = function() {
-		$http.post('/schedules', $scope.events);
+		var postData = _($scope.events).map(function(event) {
+			return {
+				title: event.title,
+				start: event.start,
+				end: event.end,
+				id: event.id,
+				ScheduleId: event.ScheduleId
+			}
+		});
+		$http.post('/schedules', postData);
 	};
 
 	$scope.clear = function() {
 		$scope.events.length = 0;
-		$scope.allEvents.length = 0;
+		if (!!$scope.allEvents) {
+			$scope.allEvents.length = 0;			
+		}
 	}
 });
