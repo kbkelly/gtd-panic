@@ -1,23 +1,6 @@
-// TODO: Cleanup duplication
-var Sequelize = require('sequelize');
-var file = "./test.db";
+var models = require('./models');
 
-var db = new Sequelize('database', 'username', 'password', {
-  dialect: 'sqlite',	 
-  storage: file
-});
-
-var Event = db.define('Event', {
-	title: Sequelize.STRING,
-	start: Sequelize.DATE,
-	end: Sequelize.DATE,
-	ScheduleId: Sequelize.INTEGER
-});
-
-var Schedule = db.define('Schedule', {});
-
-Schedule.hasMany(Event);
-Event.belongsTo(Schedule);
+var db = models.db;
 
 console.log('setting up database');
 db.sync({force: true}).complete(function(err) {

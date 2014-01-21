@@ -1,28 +1,10 @@
-var Sequelize = require('sequelize');
-var sqlite3 = require("sqlite3").verbose();
+var models = require('../models');
 var async = require('async');
-var file = "test.db";
 
-var db = new Sequelize('database', 'username', 'password', {
-  dialect: 'sqlite',	 
-  storage: file
-});
+var Event = models.Event;
+var Schedule = models.Schedule;
+var db = models.db;
 
-var Event = db.define('Event', {
-	title: Sequelize.STRING,
-	start: Sequelize.DATE,
-	end: Sequelize.DATE,
-	ScheduleId: Sequelize.INTEGER
-});
-
-var Schedule = db.define('Schedule', {
-});
-
-Schedule.hasMany(Event);
-Event.belongsTo(Schedule);
-
-// var exists = fs.existsSync(file);
-// var db = new sqlite3.Database(file);
 // Create a new schedule
 exports.create = function(req, res){
 	saveEvents(req.body, function(events) {
