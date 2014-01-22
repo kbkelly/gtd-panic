@@ -8,7 +8,6 @@ var db = models.db;
 // Create a new schedule
 exports.create = function(req, res){
 	saveEvents(req.body, function(events) {
-			console.log('Events', events.length);
 			res.json(events);
 	});
 };

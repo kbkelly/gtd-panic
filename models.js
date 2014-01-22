@@ -1,6 +1,5 @@
 var Sequelize = require('sequelize');
 var sqlite3 = require("sqlite3").verbose();
-var async = require('async');
 var file = "test.db";
 
 var db = new Sequelize('database', 'username', 'password', {
@@ -14,6 +13,13 @@ var Event = db.define('Event', {
     end: Sequelize.DATE,
     ScheduleId: Sequelize.INTEGER
 });
+
+Event.count = function(callback) {
+  db.query('select count(*) from events')
+    .success(function(res) {
+      callback(res[0]['count(*)']);
+    });
+}
 
 var Schedule = db.define('Schedule', {
 });
