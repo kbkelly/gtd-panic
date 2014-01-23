@@ -2,7 +2,8 @@ var assert = require('assert'),
   request = require('supertest'),
   schedules = require('../../routes/schedules'),
   app = require('../../app'),
-  models = require('../../models');
+  models = require('../../models'),
+  async = require('async');
 
 describe('schedules', function(){
   before(function(done) {
@@ -27,6 +28,28 @@ describe('schedules', function(){
             done();
           });
         });
-    })
+    });
+
+    it('should update pre-existing events', function(done) {
+      async.waterfall([
+        function setup(callback) {
+          models.Event.create({title: 'foobar'}).complete(callback);
+        },
+        function update(event, callback) {
+          request(app)
+            .post('/schedules')
+            .send([{id: event.id, title: 'new title'}])
+            .end(function(err, res) {
+              callback(err, event);
+            });
+        },
+        function fetchUpdatedEvent(event, callback) {
+          models.Event.find(event.id).success(callback);
+        }
+      ], function(updatedEvent) {
+        assert.equal(updatedEvent.title, 'new title');
+        done();
+      });
+    });
   })
 });

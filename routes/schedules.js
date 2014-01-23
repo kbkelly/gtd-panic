@@ -18,19 +18,40 @@ function saveEvents(eventsJson, done) {
 			console.log('The schedule has not been saved:', err);
 		}
 		// Create a set of events and associate with the schedule
-		async.map(eventsJson, function toEvent(eventJson, callback) {
-			Event.create(eventJson).complete(function(err, event) {
-				if (!!err) {
-					console.log('The event has not been saved:', err);
-				}
-				schedule.addEvent(event).complete(function(err) {
-					if (!!err) {
-						console.log('The event has not been added to the schedule:', err);
-					}
-					callback(err, event);					
-				});
-			});
-		}, function final(err, events) {
+		async.map(eventsJson, function(eventJson, callback) {
+      function updateEvent(eventJson, callback) {
+        Event.find(eventJson.id).success(function(event) {
+          delete eventJson.id;
+          event.updateAttributes(eventJson).complete(function(err, event) {
+            callback(err, event);
+          });
+        });
+      }
+
+      function createEvent(eventJson, callback) {
+        Event.create(eventJson).complete(function(err, event) {
+          if (!!err) {
+            console.log('The event has not been saved:', err);
+          }
+          schedule.addEvent(event).complete(function(err) {
+            if (!!err) {
+              console.log('The event has not been added to the schedule:', err);
+            }
+            callback(err, event);         
+          });
+        });
+      }
+
+      // There has got to be a cleaner way to do this.
+      if (eventJson.id) {
+        updateEvent(eventJson, callback);
+      } else {
+        createEvent(eventJson, callback);        
+      }
+		}, function(err, events) {
+      if (err) {
+        throw err;
+      }
 			done(events);
 		});
 	});
