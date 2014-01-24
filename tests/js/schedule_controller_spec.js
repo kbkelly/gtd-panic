@@ -202,7 +202,8 @@ describe('ScheduleController', function() {
 		expect(scope.events.length).toEqual(2);
 	});
 
-	it('can clear the events', function() {
+	it('can clear the events', inject(function($httpBackend) {
+		$httpBackend.expectDELETE('/schedules/today').respond(200);
 		scope.events.push({
 			title: 'an event'
 		});
@@ -211,24 +212,27 @@ describe('ScheduleController', function() {
 		var oldAllEvents = scope.allEvents;
 
 		scope.clear();
+		$httpBackend.flush();
 		// angular requires maintaining object references
 		expect(scope.events === oldEvents).toBeTruthy();
 		expect(scope.allEvents === oldAllEvents).toBeTruthy();
 		expect(scope.events.length).toEqual(0);
 		expect(scope.allEvents.length).toEqual(0);
-	});
+	}));
 
-	it('can clear events even if none have been loaded from csv', function() {
+	it('can clear events even if none have been loaded from csv', inject(function($httpBackend) {
+		$httpBackend.expectDELETE('/schedules/today').respond(200);
 		scope.events.push({
 			title: 'an event'
 		});
 		var oldEvents = scope.events;
 
 		scope.clear();
+		$httpBackend.flush();
 		// angular requires maintaining object references
 		expect(scope.events === oldEvents).toBeTruthy();
 		expect(scope.events.length).toEqual(0);
-	});
+	}));
 
 	// Test randomize events
 

@@ -80,3 +80,10 @@ exports.today = function(req, res) {
     res.json(events);
   });
 }
+
+exports.clear = function(req, res) {
+  // No truncate in sqlite
+  db.query('delete from events').success(function() {
+    res.send(200);
+  }); 
+}

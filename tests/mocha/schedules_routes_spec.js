@@ -1,13 +1,12 @@
 var assert = require('assert'),
   request = require('supertest'),
-  schedules = require('../../routes/schedules'),
   app = require('../../app'),
   models = require('../../models'),
   async = require('async');
 
 describe('schedules', function(){
-  before(function(done) {
-    models.db.query('delete from events').complete(done);
+  beforeEach(function(done) {
+    models.db.query('delete from events').success(done);
   });
 
   describe('#create', function(){
@@ -51,5 +50,27 @@ describe('schedules', function(){
         done();
       });
     });
-  })
+  });
+
+  describe('#clear', function() {
+    it('clears out all the events (not just todays)', function(done) {
+      async.waterfall([
+        function setup(next) {
+          models.Event.create({title: 'foobar'}).complete(next);
+        },
+        function update(event, next) {
+          request(app)
+            .del('/schedules/today')
+            .end(function(err, res) {
+              next(err);
+            });
+        }
+      ], function() {
+        models.Event.count(function(count) {
+          assert.equal(0, count);
+          done();
+        });
+      });      
+    });
+  });
 });

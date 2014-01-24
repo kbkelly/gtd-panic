@@ -183,9 +183,11 @@ gtdPanic.controller('ScheduleController', function($scope, $http, $date, savedEv
 	};
 
 	$scope.clear = function() {
-		$scope.events.length = 0;
-		if (!!$scope.allEvents) {
-			$scope.allEvents.length = 0;			
-		}
+		$http.delete('/schedules/today').success(function() {
+			$scope.events.length = 0;
+			if (!!$scope.allEvents) {
+				$scope.allEvents.length = 0;			
+			}
+		});
 	}
 });

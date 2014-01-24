@@ -37,6 +37,7 @@ app.get('/', routes.index);
 app.post('/omnifocus_upload', uploads.create);
 app.post('/schedules', schedules.create);
 app.get('/schedules/today', schedules.today);
+app.delete('/schedules/today', schedules.clear);
 app.get('/schedules/:id', schedules.show);
 
 http.createServer(app).listen(app.get('port'), function(){
