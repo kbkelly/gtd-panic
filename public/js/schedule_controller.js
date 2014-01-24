@@ -23,6 +23,7 @@ gtdPanic.controller('ScheduleController', function($scope, $http, $date, savedEv
 			allDayDefault: false,
 			editable: true,
 			defaultView: 'agendaDay',
+			ignoreTimezone: false,
 			minTime: moment($date).hour(),
 			dayClick: function(date, allDay, jsEvent, view) {
 				var newEvent = {
