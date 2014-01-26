@@ -21,6 +21,7 @@ gtdPanic.controller('ScheduleController', function($scope, $http, $date, savedEv
 		cutoffTime: 23,
 		calendar: {
 			allDayDefault: false,
+			allDaySlot: false,
 			editable: true,
 			defaultView: 'agendaDay',
 			ignoreTimezone: false,
