@@ -14,13 +14,6 @@ var Event = db.define('Event', {
     ScheduleId: Sequelize.INTEGER
 });
 
-Event.count = function(callback) {
-  db.query('select count(*) from events')
-    .success(function(res) {
-      callback(res[0]['count(*)']);
-    });
-}
-
 var Schedule = db.define('Schedule', {
 });
 

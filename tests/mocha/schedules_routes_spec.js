@@ -22,7 +22,7 @@ describe('schedules', function(){
             throw err;
           }
           assert.equal(res.status, 200);
-          models.Event.count(function(count) {
+          models.Event.count().success(function(count) {
             assert.equal(1, count);
             done();
           });
@@ -66,7 +66,7 @@ describe('schedules', function(){
             });
         }
       ], function() {
-        models.Event.count(function(count) {
+        models.Event.count().success(function(count) {
           assert.equal(0, count);
           done();
         });
