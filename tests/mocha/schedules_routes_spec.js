@@ -6,7 +6,9 @@ var assert = require('assert'),
 
 describe('schedules', function(){
   beforeEach(function(done) {
-    models.db.query('delete from events').success(done);
+    models.db.query('delete from events').success(function() {
+      models.db.query('delete from schedules').success(done);
+    });
   });
 
   describe('#create', function(){
@@ -27,6 +29,25 @@ describe('schedules', function(){
             done();
           });
         });
+    });
+
+    it('should associate those events with a schedule', function(done) {
+      var postBody = [
+        {title: 'first', start: 'fdsafsd'}
+      ];
+      request(app)
+        .post('/schedules')
+        .send(postBody)
+        .end(function(err, res) {
+          if (err) {
+            throw err;
+          }
+          assert.equal(res.status, 200);
+          models.Schedule.count().success(function(count) {
+            assert.equal(1, count);
+            done();
+          });
+        });            
     });
 
     it('should update pre-existing events', function(done) {
