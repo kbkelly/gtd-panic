@@ -12,6 +12,10 @@ gtdPanic.service('$date', function() {
     return new Date();
 });
 
+gtdPanic.config(function($locationProvider) {
+    $locationProvider.html5Mode(true);
+});
+
 gtdPanic.config(function($stateProvider, $urlRouterProvider) {
     $urlRouterProvider.otherwise('/');
 
