@@ -44,26 +44,15 @@ gtdPanic.controller('ScheduleController', function($scope, $http, $date, savedEv
 					//			move all events between original and new index backwards by event's duration
 					//		if -delta
 					//			move all events between original and new index forwards by event's duration
-					// 	all events after the event should be moved forward by the 
-					function moveEventWithinList(event) {
-						var index = $scope.events.indexOf(event);
-						// Assume that events are sorted by start time
-
-						// Remove the event and add it back in the right place
-						$scope.events.splice(index, 1);
-						
-						// Find the event that is immediately following this moved event's new time
-						var eventStart = moment(event.start);
-						var firstAfter = _.find($scope.events, function(otherEvent) {
-							var otherEventStart = moment(otherEvent.start);
-							if (eventStart.isSame(otherEventStart) || otherEventStart.isAfter(eventStart)) {
-								return otherEvent;
-							}
-						});
-						var firstAfterIndex = $scope.events.indexOf(firstAfter);
-						$scope.events = $scope.events.slice(0, firstAfterIndex).concat(event, $scope.events.slice(firstAfterIndex));						
-					}
-					moveEventWithinList(event);					
+          $scope.events.sort(function sortByStartTime(a, b) {
+            if (a.start < b.start) {
+              return -1;
+            } else if (a.start > b.start) {
+              return 1;
+            } else {
+              return 0;
+            }
+          });
 					var secondDelta = minuteDelta * 60;
 					var newStartTime = moment(event.start);
 					var oldStartTime = newStartTime.subtract('seconds', secondDelta);
