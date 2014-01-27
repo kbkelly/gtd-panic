@@ -61,12 +61,12 @@ function saveEvents(eventsJson, done) {
 
 // Display a previously created schedule
 exports.show = function(req, res) {
-  Event.findAll({where: {ScheduleId: req.params.id}}).complete(function(err, events) {
+  Schedule.find({where: {guid: req.params.guid}, include: [Event]}).complete(function(err, schedule) {
     if (!!err) {
       console.log('Find failed: ', err);
     }
-    res.json(events);
-  }); 	
+    res.json(schedule.events);
+  });
 }
 
 exports.today = function(req, res) {

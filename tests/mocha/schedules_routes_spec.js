@@ -97,4 +97,30 @@ describe('schedules', function(){
       });      
     });
   });
+
+  describe('#show', function() {
+    it('returns all the events for a given schedule', function(done) {
+      function setup() {
+        models.Schedule.create({guid: 'foo'}).success(function(schedule) {
+          models.Event.create({title: 'foobar event title'}).success(function(event) {
+            schedule.addEvent(event).complete(function(err) {
+              verify(err, schedule);
+            });
+          });
+        });
+      }
+
+      function verify(err, schedule) {
+        request(app)
+          .get('/schedules/foo')
+          .end(function(err, res) {
+            assert.equal(res.body.length, 1);
+            assert.equal(res.body[0].title, 'foobar event title');
+            done(err);
+          });
+      }
+
+      setup();
+    });
+  });
 });
