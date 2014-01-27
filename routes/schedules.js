@@ -1,5 +1,6 @@
 var models = require('../models');
 var async = require('async');
+var uuid = require('node-uuid');
 
 var Event = models.Event;
 var Schedule = models.Schedule;
@@ -13,7 +14,8 @@ exports.create = function(req, res){
 };
 
 function saveEvents(eventsJson, done) {
-	Schedule.create({}).complete(function (err, schedule) {
+  var guid = uuid.v4();
+	Schedule.create({guid: guid}).complete(function (err, schedule) {
 		if (!!err) {
 			console.log('The schedule has not been saved:', err);
 		}

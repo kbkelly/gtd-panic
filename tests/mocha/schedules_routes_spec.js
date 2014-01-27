@@ -1,4 +1,4 @@
-var assert = require('assert'),
+var assert = require('chai').assert,
   request = require('supertest'),
   app = require('../../app'),
   models = require('../../models'),
@@ -45,7 +45,10 @@ describe('schedules', function(){
           assert.equal(res.status, 200);
           models.Schedule.count().success(function(count) {
             assert.equal(1, count);
-            done();
+            models.Schedule.findAll().success(function(schedules) {
+              assert.isNotNull(schedules[0].guid);
+              done();
+            });
           });
         });            
     });

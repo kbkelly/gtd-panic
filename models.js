@@ -15,6 +15,7 @@ var Event = db.define('Event', {
 });
 
 var Schedule = db.define('Schedule', {
+  guid: Sequelize.STRING
 });
 
 Schedule.hasMany(Event);
