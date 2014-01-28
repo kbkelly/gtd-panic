@@ -8,8 +8,8 @@ var db = models.db;
 
 // Create a new schedule
 exports.create = function(req, res){
-	saveEvents(req.body, function(events) {
-			res.json(events);
+	saveEvents(req.body, function(schedule) {
+			res.json(schedule);
 	});
 };
 
@@ -54,7 +54,9 @@ function saveEvents(eventsJson, done) {
       if (err) {
         throw err;
       }
-			done(events);
+      Schedule.find({where: {id: schedule.id}, include: [Event]}).success(function(sched) {
+        done(sched);
+      })
 		});
 	});
 }

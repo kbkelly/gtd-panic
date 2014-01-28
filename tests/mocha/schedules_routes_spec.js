@@ -24,6 +24,9 @@ describe('schedules', function(){
             throw err;
           }
           assert.equal(res.status, 200);
+          assert.isNotNull(res.body.guid);
+          assert.equal(res.body.events.length, 1);
+          assert.equal(res.body.events[0].title, 'first');
           models.Event.count().success(function(count) {
             assert.equal(1, count);
             done();
