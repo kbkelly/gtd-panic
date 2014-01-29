@@ -14,11 +14,10 @@ gtdPanic.service('$date', function() {
 
 gtdPanic.config(function($locationProvider) {
     $locationProvider.html5Mode(true);
+    $locationProvider.hashPrefix('!');
 });
 
 gtdPanic.config(function($stateProvider, $urlRouterProvider) {
-    $urlRouterProvider.otherwise('/');
-
     $stateProvider
         .state('home', {
             url: '/',
@@ -29,6 +28,19 @@ gtdPanic.config(function($stateProvider, $urlRouterProvider) {
                     return $http.get('/schedules/today').then(function(response) {
                         return response.data;
                     });
+                }
+            }
+        })
+        .state('schedule.saved', {
+            url: '/schedule/:guid',
+            templateUrl: 'home.html',
+            controller: 'ScheduleController',
+            resolve: {
+                savedEvents: function($stateParams, $http) {
+                    return $http.get('/schedules/' + $stateParams.guid)
+                        .then(function(response) {
+                            return response.data;
+                        });
                 }
             }
         });

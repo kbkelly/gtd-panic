@@ -69,7 +69,10 @@ describe('ScheduleController', function() {
 		scope.events = [
 			{title: 'saved event'}
 		];
-		$httpBackend.expectPOST('/schedules', scope.events).respond(200);
+		$httpBackend.expectPOST('/schedules', scope.events).respond({
+			guid: 'foo',
+			events: []
+		});
 		scope.save();
 		$httpBackend.flush();
 		$httpBackend.verifyNoOutstandingExpectation();
@@ -95,7 +98,10 @@ describe('ScheduleController', function() {
 				ScheduleId: 456
 			}
 		];
-		$httpBackend.expectPOST('/schedules', expectedPostData).respond(200);
+		$httpBackend.expectPOST('/schedules', expectedPostData).respond({
+			guid: 'foo',
+			events: []
+		});
 		scope.save();
 		$httpBackend.flush();
 	}));

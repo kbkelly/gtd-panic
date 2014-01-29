@@ -1,4 +1,4 @@
-gtdPanic.controller('ScheduleController', function($scope, $http, $date, savedEvents) {
+gtdPanic.controller('ScheduleController', function($scope, $http, $date, savedEvents, $location) {
 	function shuffle(array) {
 	    var counter = array.length, temp, index;
 
@@ -170,7 +170,10 @@ gtdPanic.controller('ScheduleController', function($scope, $http, $date, savedEv
 				ScheduleId: event.ScheduleId
 			}
 		});
-		$http.post('/schedules', postData);
+		$http.post('/schedules', postData).success(function(schedule) {
+      $location.path('/schedule/' + schedule.guid);
+      $location.replace();
+    });
 	};
 
 	$scope.clear = function() {
