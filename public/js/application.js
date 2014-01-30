@@ -24,15 +24,13 @@ gtdPanic.config(function($stateProvider, $urlRouterProvider) {
             templateUrl: 'home.html',
             controller: 'ScheduleController',
             resolve: {
-                savedEvents: function($http) {
-                    return $http.get('/schedules/today').then(function(response) {
-                        return response.data;
-                    });
+                savedEvents: function() {
+                    return [];
                 }
             }
         })
-        .state('schedule.saved', {
-            url: '/schedule/:guid',
+        .state('savedSchedule', {
+            url: '/schedule/{guid}',
             templateUrl: 'home.html',
             controller: 'ScheduleController',
             resolve: {
@@ -44,4 +42,6 @@ gtdPanic.config(function($stateProvider, $urlRouterProvider) {
                 }
             }
         });
+
+    // $urlRouterProvider.otherwise('/errors/404');
 });
