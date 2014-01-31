@@ -1,6 +1,6 @@
 var Sequelize = require('sequelize');
 var sqlite3 = require("sqlite3").verbose();
-var file = "test.db";
+var file = process.env["DB"];
 
 var db = new Sequelize('database', 'username', 'password', {
   dialect: 'sqlite',     
