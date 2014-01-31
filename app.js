@@ -9,6 +9,9 @@ var uploads = require('./routes/uploads');
 var schedules = require('./routes/schedules');
 var http = require('http');
 var path = require('path');
+var mongo = require('mongodb');
+var monk = require('monk');
+var db = monk(process.env["DB"]);
 
 var app = express();
 
@@ -35,10 +38,9 @@ if ('development' == app.get('env')) {
 
 app.get('/', routes.index);
 app.post('/omnifocus_upload', uploads.create);
-app.post('/schedules', schedules.create);
-app.get('/schedules/today', schedules.today);
-app.delete('/schedules/today', schedules.clear);
-app.get('/schedules/:guid', schedules.show);
+app.post('/schedules', schedules.create(db));
+app.delete('/schedules/:id', schedules.clear(db));
+app.get('/schedules/:id', schedules.show(db));
 app.get('*', routes.index);
 
 http.createServer(app).listen(app.get('port'), function(){

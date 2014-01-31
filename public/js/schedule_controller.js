@@ -171,7 +171,7 @@ gtdPanic.controller('ScheduleController', function($scope, $http, $date, savedEv
 			}
 		});
 		$http.post('/schedules', postData).success(function(schedule) {
-      $location.path('/schedule/' + schedule.guid);
+      $location.path('/schedule/' + schedule._id);
       $location.replace();
     });
 	};
