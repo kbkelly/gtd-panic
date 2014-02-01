@@ -26,3 +26,5 @@ _testmain.go
 public/components/
 .idea
 *.db
+data/
+node_modules/
