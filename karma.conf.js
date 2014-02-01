@@ -24,6 +24,7 @@ module.exports = function(config) {
         'public/components/angular-ui-router/release/angular-ui-router.js',
         'public/components/ng-file-upload/angular-file-upload.js',
         'public/components/momentjs/moment.js',
+        'public/vendor/twix.js',
         'public/components/underscore/underscore.js',
         'public/js/*.js',
         'tests/js/*spec.js'
