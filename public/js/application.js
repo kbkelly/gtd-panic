@@ -41,7 +41,11 @@ gtdPanic.config(function($stateProvider, $urlRouterProvider) {
                         });
                 }
             }
+        })
+        .state('error404', {
+            url: '/errors/404',
+            templateUrl: '404.html'
         });
 
-    // $urlRouterProvider.otherwise('/errors/404');
+    $urlRouterProvider.otherwise('/errors/404');
 });
