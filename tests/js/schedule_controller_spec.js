@@ -8,15 +8,17 @@ describe('ScheduleController', function() {
 		controller = $controller('ScheduleController', {
 			$scope: scope,
 			$date: currentDate,
-			savedEvents: []
+			savedSchedule: null
 		});
 	}));
 
 	it('injects previously saved events into the calendar', inject(function($controller) {
-		var events = [
-			{title: 'first saved event'}
-		];
-		$controller('ScheduleController', {$scope: scope, savedEvents: events});
+    var schedule = {
+      events: [
+        {title: 'first saved event'}
+      ]
+    };
+		$controller('ScheduleController', {$scope: scope, savedSchedule: schedule});
 		expect(scope.events.length).toEqual(1);
 	}));
 
@@ -75,46 +77,80 @@ describe('ScheduleController', function() {
 		expect(scope.events[0].title).toEqual('remaining event');
 	});
 
-	it('can save events', inject(function($httpBackend) {
-		scope.events = [
-			{title: 'saved event'}
-		];
-		$httpBackend.expectPOST('/schedules', scope.events).respond({
-			guid: 'foo',
-			events: []
-		});
-		scope.save();
-		$httpBackend.flush();
-		$httpBackend.verifyNoOutstandingExpectation();
-	}));
+	describe('saving', function() {
+		it('can save events', inject(function($httpBackend) {
+			scope.events = [
+				{title: 'saved event'}
+			];
+			var expectedPostData = {
+				events: scope.events
+			};
+			$httpBackend.expectPOST('/schedules', expectedPostData).respond({
+				_id: 'foo'
+			});
+			scope.save();
+			$httpBackend.flush();
+			$httpBackend.verifyNoOutstandingExpectation();
+		}));
 
-	it('saving only serializes relevant object properties', inject(function($httpBackend) {
-		// Don't want to send sequelize objects back to the server
-		scope.events = [ {
-			title: 'send me back',
-			start: 'foo',
-			end: 'bar',
-			id: 123,
-			ScheduleId: 456,
-			source: {another: 'object'},
-			__uiCalId: 'whatever'
-		}];
-		var expectedPostData = [
-			{
+		it('updates existing schedules', inject(function($controller, $httpBackend) {
+			scope.events = [
+				{_id: 'eventid', title: 'saved event'}
+			];
+      var savedSchedule = {
+          _id: 'scheduleid',
+          events: []
+      };
+      $controller('ScheduleController', {
+        $scope: scope, 
+        savedSchedule: savedSchedule
+      });
+			savedSchedule.events.push.apply(savedSchedule.events, scope.events);
+			$httpBackend.expectPUT('/schedules/scheduleid', scope.schedule).respond({
+				_id: 'scheduleid',
+				events: [
+					{_id: 'eventid', title: 'saved event'}
+				]
+			});
+			scope.save();
+			$httpBackend.flush();
+		}));
+
+		it('saving only serializes relevant object properties', inject(function($httpBackend) {
+			// Don't want to send sequelize objects back to the server
+			scope.events = [ {
 				title: 'send me back',
 				start: 'foo',
 				end: 'bar',
-				id: 123,
-				ScheduleId: 456
-			}
-		];
-		$httpBackend.expectPOST('/schedules', expectedPostData).respond({
-			guid: 'foo',
-			events: []
-		});
-		scope.save();
-		$httpBackend.flush();
-	}));
+				_id: 123,
+				source: {another: 'object'},
+				__uiCalId: 'whatever'
+			}];
+			var expectedPostData = {
+				events: [
+					{
+						title: 'send me back',
+						start: 'foo',
+						end: 'bar',
+						_id: 123,
+					}
+				]
+			};
+			$httpBackend.expectPOST('/schedules', expectedPostData).respond({
+				_id: 'foo',
+				events: [
+					{
+						title: 'send me back',
+						start: 'foo',
+						end: 'bar',
+						_id: 123,
+					}
+				]
+			});
+			scope.save();
+			$httpBackend.flush();
+		}));
+	});
 
 	describe('clicking anywhere on the calendar', function() {
 		it('creates a new event', function() {

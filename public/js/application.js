@@ -24,8 +24,8 @@ gtdPanic.config(function($stateProvider, $urlRouterProvider) {
             templateUrl: 'home.html',
             controller: 'ScheduleController',
             resolve: {
-                savedEvents: function() {
-                    return [];
+                savedSchedule: function() {
+                    return null;
                 }
             }
         })
@@ -34,7 +34,7 @@ gtdPanic.config(function($stateProvider, $urlRouterProvider) {
             templateUrl: 'home.html',
             controller: 'ScheduleController',
             resolve: {
-                savedEvents: function($stateParams, $http) {
+                savedSchedule: function($stateParams, $http) {
                     return $http.get('/schedules/' + $stateParams.guid)
                         .then(function(response) {
                             return response.data;

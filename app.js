@@ -39,6 +39,7 @@ if ('development' == app.get('env')) {
 app.get('/', routes.index);
 app.post('/omnifocus_upload', uploads.create);
 app.post('/schedules', schedules.create(db));
+app.put('/schedules/:id', schedules.update(db));
 app.delete('/schedules/:id', schedules.clear(db));
 app.get('/schedules/:id', schedules.show(db));
 app.get('*', routes.index);

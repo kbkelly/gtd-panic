@@ -1,4 +1,4 @@
-gtdPanic.controller('ScheduleController', function($scope, $http, $date, savedEvents, $location) {
+gtdPanic.controller('ScheduleController', function($scope, $http, $date, savedSchedule, $location) {
 	function shuffle(array) {
 	    var counter = array.length, temp, index;
 
@@ -118,8 +118,8 @@ gtdPanic.controller('ScheduleController', function($scope, $http, $date, savedEv
 	$scope.events = [];
 	$scope.eventSources.push($scope.events);
 
-	if (savedEvents.length) {
-		$scope.events.push.apply($scope.events, savedEvents);
+	if (savedSchedule) {
+		$scope.events.push.apply($scope.events, savedSchedule.events);
 	}
 
 	$scope.$watch('allEvents', function(allEvents) {
@@ -161,19 +161,35 @@ gtdPanic.controller('ScheduleController', function($scope, $http, $date, savedEv
 	}
 
 	$scope.save = function() {
-		var postData = _($scope.events).map(function(event) {
-			return {
-				title: event.title,
-				start: event.start,
-				end: event.end,
-				id: event.id,
-				ScheduleId: event.ScheduleId
-			}
-		});
-		$http.post('/schedules', postData).success(function(schedule) {
+		function eventsPostData(events) {
+			return _(events).map(function(event) {
+				return {
+					title: event.title,
+					start: event.start,
+					end: event.end,
+					_id: event._id,
+				}
+			})	
+		}
+
+		function redirect(schedule) {
+			savedSchedule = schedule;
       $location.path('/schedule/' + schedule._id);
       $location.replace();
-    });
+	  }
+
+		if (savedSchedule) {
+			var postData = {
+				_id: savedSchedule._id,
+				events: eventsPostData($scope.events)
+			};
+			$http.put('/schedules/' + savedSchedule._id, postData);
+		} else {
+			var postData = {
+				events: eventsPostData($scope.events)
+			};
+			$http.post('/schedules', postData).success(redirect);			
+		}
 	};
 
 	$scope.clear = function() {

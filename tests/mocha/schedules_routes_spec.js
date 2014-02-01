@@ -14,16 +14,16 @@ describe('schedules', function(){
 
   describe('#create', function(){
     it('should save some events', function(done){
-      var postBody = [
-        {title: 'first', start: 'fdsafsd'}
-      ];
+      var postBody = {
+        events: [
+          {title: 'first', start: 'fdsafsd'}
+        ]
+      };
       request(app)
         .post('/schedules')
         .send(postBody)
         .end(function(err, res) {
-          if (err) {
-            throw err;
-          }
+          if (err) done(err);
           assert.equal(res.status, 200);
           assert.isNotNull(res.body._id);
           assert.equal(res.body.events.length, 1);
@@ -32,30 +32,31 @@ describe('schedules', function(){
         });
     });
 
-    // it('should update pre-existing schedules', function(done) {
-    //   schedules.insert({
-    //     events: [
-    //       {title: 'foobar'}
-    //     ],
-    //   }, function(err, schedule) {
-    //     request(app)
-    //       .post('/schedules')
-    //       .send([{id: event.id, title: 'new title'}])
-    //       .end(function(err, res) {
-    //         callback(err, event);
-    //       });
-    //   });
-    //   async.waterfall([
-    //     function update(event, callback) {
-    //     },
-    //     function fetchUpdatedEvent(event, callback) {
-    //       models.Event.find(event.id).success(callback);
-    //     }
-    //   ], function(updatedEvent) {
-    //     assert.equal(updatedEvent.title, 'new title');
-    //     done();
-    //   });
-    // });
+    it('should update pre-existing schedules', function(done) {
+      schedules.insert({
+        events: [
+          {title: 'foobar'}
+        ],
+      }, function(err, schedule) {
+        if (err) done(err);
+        assert.isNotNull(schedule._id);
+        request(app)
+          .put('/schedules/' + schedule._id)
+          .send({
+            events: [
+              {_id: schedule.events[0]._id, title: 'new title'}
+            ]
+          })
+          .end(function(err, res) {
+            if (err) done(err);
+            schedules.findById(schedule._id, function(err, updatedSchedule) {
+              if (err) done(err);
+              assert.equal(updatedSchedule.events[0].title, 'new title');
+              done();
+            });
+          });
+      });
+    });
   });
 
   describe('#clear', function() {
@@ -82,7 +83,7 @@ describe('schedules', function(){
   });
 
   describe('#show', function() {
-    it('returns all the events for a given schedule', function(done) {
+    it('returns a given schedule', function(done) {
       schedules.insert({
         events: [
           {title: 'foobar event title'}
@@ -92,8 +93,9 @@ describe('schedules', function(){
         request(app)
           .get('/schedules/' + schedule._id)
           .end(function(err, res) {
-            assert.equal(res.body.length, 1);
-            assert.equal(res.body[0].title, 'foobar event title');
+            assert.equal(res.body._id, schedule._id);
+            assert.equal(res.body.events.length, 1);
+            assert.equal(res.body.events[0].title, 'foobar event title');
             done(err);
           });
       });
