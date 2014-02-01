@@ -1,26 +1,30 @@
 script(type='text/ng-template', id='home.html')
   .row.visible-md.visible-lg
     div(ng-controller='UploadController')
-      input(type='file', name='csvUpload', ng-file-select='onSelectCsv($files)')
+      form.form-inline
+        input(type='file', name='csvUpload', ng-file-select='onSelectCsv($files)')
   .row
     form.form-inline
-      label
-        input(type='checkbox', ng-model='uiConfig.randomize')
-        | Randomize
-      label(for='defaultDuration')
-        | Default Event Duration
-        select#defaultDuration(ng-model='uiConfig.defaultDuration')
-          option(value='15') 15 minutes
-          option(value='30') 30 minutes
-      label(for='cutoff')
-        | Cutoff Time
-        select#cutoff(ng-model='uiConfig.cutoffTime')
-          option(value='20') 8pm
-          option(value='21') 9pm
-          option(value='22') 10pm
-          option(value='23') 11pm
-      input(type='button', value='Save', ng-click='save()')
-      input(type='button', value='Clear', ng-click='clear()')
+      .checkbox
+        label
+          input(type='checkbox', ng-model='uiConfig.randomize')
+          | Randomize
+      .form-group
+        label(for='defaultDuration')
+          | Default Event Duration
+          select#defaultDuration(ng-model='uiConfig.defaultDuration')
+            option(value='15') 15 minutes
+            option(value='30') 30 minutes
+      .form-group
+        label(for='cutoff')
+          | Cutoff Time
+          select#cutoff(ng-model='uiConfig.cutoffTime')
+            option(value='20') 8pm
+            option(value='21') 9pm
+            option(value='22') 10pm
+            option(value='23') 11pm
+      input(type='submit', value='Save', ng-click='save()')
+      input(type='submit', value='Clear', ng-click='clear()')
   .row
     ul.col-md-3.hidden-sm.hidden-xs.event-list
       li.ng-scope(ng-repeat='e in events | orderBy:"start"')
