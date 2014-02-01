@@ -53,6 +53,7 @@ td, th {
 
 .event-list {
     list-style-type: none;
+    margin-top: 43px;
 }
 
 .event-entry {
@@ -61,4 +62,9 @@ td, th {
 
 .event-entry input {
     width: 90%;
+}
+
+/** Override Bootstrap **/
+.alert {
+    padding: 0px;
 }
