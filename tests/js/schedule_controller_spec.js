@@ -25,34 +25,44 @@ describe('ScheduleController', function() {
 		expect(scope.uiConfig.cutoffTime).toEqual(23); // 11pm
 	});
 
-	it('properly configures timing of incoming events', function() {
-		var events = [
-			{title: 'first event'},
-			{title: 'second event'}
-		];
-		scope.allEvents = events;
-		scope.$apply();
-		expect(scope.events.length).toEqual(2);
-		expect(events[0].start).toBeDefined();
-		expect(events[0].end).toBeDefined();
-		// Default duration
-		expect(events[0].start + 1800).toEqual(events[0].end);
-		// Proper chronological ordering
-		expect(events[1].start).toEqual(events[0].end);
+	describe('incoming events', function() {
+		it('properly configures timing of incoming events', function() {
+			var events = [
+				{title: 'first event'},
+				{title: 'second event'}
+			];
+			scope.allEvents = events;
+			scope.$apply();
+			expect(scope.events.length).toEqual(2);
+			expect(events[0].start).toBeDefined();
+			expect(events[0].end).toBeDefined();
+			// Default duration of 30m
+			expect(events[0].start.getHours()).toEqual(9);
+			expect(events[0].start.getMinutes()).toEqual(0);
+			expect(events[0].end.getHours()).toEqual(9);
+			expect(events[0].end.getMinutes()).toEqual(30);
+			// Proper chronological ordering
+			expect(events[1].start.getHours()).toEqual(9);
+			expect(events[1].start.getMinutes()).toEqual(30);
+			expect(events[1].end.getHours()).toEqual(10);
+			expect(events[1].end.getMinutes()).toEqual(0);
+			expect(scope.eventSources[0]).toEqual(events);
+		});
 
-		expect(scope.eventSources[0]).toEqual(events);
-	});
+		it('allows events to have a predefined duration', function() {
+			var events = [
+				{title: 'first event', duration: 3600},
+				{title: 'second event'}
+			];
+			// Inject the events
+			scope.allEvents = events;
+			scope.$apply();
 
-	it('allows events to have a predefined duration', function() {
-		var events = [
-			{title: 'first event', duration: 3600},
-			{title: 'second event'}
-		];
-		// Inject the events
-		scope.allEvents = events;
-		scope.$apply();
-
-		expect(events[0].end).toEqual(events[0].start + 3600);
+			expect(events[0].start.getHours()).toEqual(9);
+			expect(events[0].start.getMinutes()).toEqual(0);
+			expect(events[0].end.getHours()).toEqual(10);
+			expect(events[0].end.getMinutes()).toEqual(00);
+		});
 	});
 
 	it('can remove events', function() {

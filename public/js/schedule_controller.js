@@ -138,9 +138,9 @@ gtdPanic.controller('ScheduleController', function($scope, $http, $date, savedEv
 				event.duration = $scope.uiConfig.defaultDuration * 60;
 			}
 
-			event.start = startTime.unix();
+			event.start = startTime.clone().toDate();
 			startTime = startTime.add('seconds', event.duration);
-			event.end = startTime.unix();
+			event.end = startTime.clone().toDate();
 		}
 		
 		function setupEvent(event) {
