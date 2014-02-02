@@ -2,9 +2,10 @@ describe('ScheduleController', function() {
 	beforeEach(module('GtdPanic'));
 
 	var scope, controller, currentDate;
-	beforeEach(inject(function($rootScope, $controller) {
+	beforeEach(inject(function($rootScope, $controller, $httpBackend) {
 		currentDate = new Date(2020, 3, 3, 9, 0, 0); // 9am
 		scope = $rootScope.$new();
+
 		controller = $controller('ScheduleController', {
 			$scope: scope,
 			$date: currentDate,
@@ -255,33 +256,57 @@ describe('ScheduleController', function() {
 	});
 
   describe('clearing a schedule', function() {
-    it('can clear the events', inject(function($httpBackend) {
-      $httpBackend.expectDELETE('/schedules/today').respond(200);
-      scope.events.push({
-        title: 'an event'
-      });
-      var oldEvents = scope.events;
-      scope.allEvents = scope.events;
-      var oldAllEvents = scope.allEvents;
+    describe('when one has been saved', function() {
+      var savedSchedule;
+      beforeEach(inject(function($controller, $httpBackend) {
+        savedSchedule = {
+            _id: 'scheduleid',
+            events: [{
+              title: 'an event'
+            }]
+        };
+        
+        $controller('ScheduleController', {
+          $scope: scope, 
+          savedSchedule: savedSchedule
+        });
+      }));
 
-      scope.clear();
-      $httpBackend.flush();
-      // angular requires maintaining object references
-      expect(scope.events === oldEvents).toBeTruthy();
-      expect(scope.allEvents === oldAllEvents).toBeTruthy();
-      expect(scope.events.length).toEqual(0);
-      expect(scope.allEvents.length).toEqual(0);
-    }));
+      it('deletes the schedule when one has been saved', inject(function($httpBackend) {
+        $httpBackend.expectDELETE('/schedules/scheduleid').respond(200);
+        
+        scope.events.push(savedSchedule.events[0]);
 
+        var oldEvents = scope.events;
+        scope.allEvents = scope.events;
+        var oldAllEvents = scope.allEvents;
+
+        scope.clear();
+        $httpBackend.flush();
+        // angular requires maintaining object references
+        expect(scope.events === oldEvents).toBeTruthy();
+        expect(scope.allEvents === oldAllEvents).toBeTruthy();
+        expect(scope.events.length).toEqual(0);
+        expect(scope.allEvents.length).toEqual(0);
+      }));
+
+      it('sets the state back to home when clearing a saved schedule', inject(function($httpBackend, $location) {
+        $httpBackend.expectDELETE('/schedules/scheduleid').respond(200);
+
+        scope.clear();
+        $httpBackend.flush();
+        expect($location.path()).toEqual('/');
+      }));
+    });
+   
     it('can clear events even if none have been loaded from csv', inject(function($httpBackend) {
-      $httpBackend.expectDELETE('/schedules/today').respond(200);
       scope.events.push({
         title: 'an event'
       });
       var oldEvents = scope.events;
 
       scope.clear();
-      $httpBackend.flush();
+      $httpBackend.verifyNoOutstandingExpectation();
       // angular requires maintaining object references
       expect(scope.events === oldEvents).toBeTruthy();
       expect(scope.events.length).toEqual(0);
