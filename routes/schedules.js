@@ -7,8 +7,11 @@ exports.create = function(db) {
     schedules.insert({
       events: eventsToInsert
     }, function(err, schedule) {
-      if (err) throw err;
-      res.json(schedule);
+      if (err) {
+        res.send(err);
+      } else {
+        res.json(schedule);
+      }
     });
   };
 }
@@ -37,9 +40,8 @@ exports.show = function(db) {
     var schedules = db.get('schedules');
     schedules.findById(req.params.id, function(err, schedule) {
       if (err) {
-        throw err;
+        res.send(err);
       } else if (!schedule) {
-        console.log('Find failed: ', err);
         res.send(404);
       } else {
         res.json(schedule);
@@ -52,8 +54,11 @@ exports.clear = function(db) {
   return function(req, res) {
     var schedules = db.get('schedules');
     schedules.remove({_id: req.params.id}, function(err) {
-      if (err) throw err;
-      res.send(200);
+      if (err) {
+        res.send(err);
+      } else {
+        res.send(200);
+      };
     });
   }
 }
