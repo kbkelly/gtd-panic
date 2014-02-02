@@ -30,6 +30,7 @@ gtdPanic.controller('ScheduleController', function($scope, $http, $date, savedSc
 				var newEvent = {
 					title: 'New Event',
 					start: moment(date).unix(),
+					duration: 1800, // 30 minutes
 					end: moment(date).add('minutes', 30).unix()
 				};
 				$scope.$apply(function() {

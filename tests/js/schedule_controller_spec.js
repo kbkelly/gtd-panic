@@ -161,6 +161,7 @@ describe('ScheduleController', function() {
 			var startUnixTimestamp = moment(time).unix();
 			expect(scope.events[0].start).toEqual(startUnixTimestamp);
 			expect(scope.events[0].end).toEqual(startUnixTimestamp + 1800);
+      expect(scope.events[0].duration).toEqual(1800);
 		});
 	});
 
