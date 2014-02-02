@@ -132,6 +132,17 @@ gtdPanic.controller('ScheduleController', function($scope, $http, $date, savedSc
 		}
 
 		var startTime = moment($date);
+		function snapToGrid(aMoment) {
+			if (aMoment.minutes() > 45) {
+				aMoment.add(1, 'hours');
+				aMoment.minutes(0);
+			} else if (aMoment.minutes() > 15 && aMoment.minutes() < 45) {
+				aMoment.minutes(30);
+			} else {
+				aMoment.minutes(0);
+			}
+		}
+		snapToGrid(startTime);
 
 		function setupEventDuration(event) {
 			// Duration is in seconds for some reason

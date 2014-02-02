@@ -1,9 +1,10 @@
 describe('ScheduleController', function() {
 	beforeEach(module('GtdPanic'));
 
-	var scope, controller, currentDate;
+	var scope, controller, currentDate, currentMoment;
 	beforeEach(inject(function($rootScope, $controller, $httpBackend) {
-		currentDate = new Date(2020, 3, 3, 9, 0, 0); // 9am
+		currentMoment = moment(new Date(2020, 3, 3, 9, 0, 0));
+    currentDate = currentMoment.toDate(); // 9am
 		scope = $rootScope.$new();
 
 		controller = $controller('ScheduleController', {
@@ -51,6 +52,20 @@ describe('ScheduleController', function() {
 			expect(events[1].end.getMinutes()).toEqual(0);
 			expect(scope.eventSources[0]).toEqual(events);
 		});
+
+    it('snaps incoming events to the grid', inject(function($controller) {
+      currentMoment.add(5, 'minutes');
+
+      var incomingEvents = [
+        {title: 'first event'},
+        {title: 'second event'}
+      ];
+
+      scope.allEvents = incomingEvents;
+      scope.$apply();
+      expect(incomingEvents[0].start.getHours()).toEqual(9);
+      expect(incomingEvents[0].start.getMinutes()).toEqual(0);
+    }));
 
     it('does not overlap incoming events with existing events', function() {
       var incomingEvents = [
