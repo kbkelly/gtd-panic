@@ -9,7 +9,7 @@
   },
   "scripts": {
     "start": "node app.js",
-    "test": "karma run && DB='localhost:27017/gtd_test' mocha tests/mocha/*.js"
+    "test": "source test.env; mocha tests/mocha/*.js && karma run"
   },
   "repository": {
     "type": "git",

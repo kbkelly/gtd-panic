@@ -3,7 +3,7 @@ var assert = require('chai').assert,
   app = require('../../app'),
   async = require('async'),
   monk = require('monk'),
-  db = monk(process.env["DB"]);
+  db = monk(process.env["MONGOHQ_URL"]);
 
 describe('schedules', function(){
   var schedules;

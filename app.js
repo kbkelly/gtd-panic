@@ -11,7 +11,7 @@ var http = require('http');
 var path = require('path');
 var mongo = require('mongodb');
 var monk = require('monk');
-var db = monk(process.env["DB"]);
+var db = monk(process.env["MONGOHQ_URL"]);
 
 var app = express();
 
