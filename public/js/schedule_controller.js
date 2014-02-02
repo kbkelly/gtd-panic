@@ -69,29 +69,29 @@ gtdPanic.controller('ScheduleController', function($scope, $http, $date, savedSc
 							if (moveForward) {
 								// Between new start time and old start time
 								if ((movingEventStart.isAfter(newStartTime) ||
-									 movingEventStart.isSame(newStartTime)) && 
-									(movingEventEnd.isBefore(oldStartTime) || 
+									 movingEventStart.isSame(newStartTime)) &&
+									(movingEventEnd.isBefore(oldStartTime) ||
 									 movingEventEnd.isSame(oldStartTime)))
 									{
 									movingEvent.start = movingEventStart + event.duration;
-									movingEvent.end = movingEventEnd + event.duration;									
+									movingEvent.end = movingEventEnd + event.duration;
 								}
 							} else {
 								if ((movingEventStart.isAfter(oldStartTime) ||
-									 movingEventStart.isSame(oldStartTime)) && 
-									(movingEventEnd.isBefore(newEndTime) || 
+									 movingEventStart.isSame(oldStartTime)) &&
+									(movingEventEnd.isBefore(newEndTime) ||
 									 movingEventEnd.isSame(newEndTime))) {
 									movingEvent.start = movingEventStart.subtract('seconds', event.duration).toDate();
 									movingEvent.end = movingEventEnd.subtract('seconds', event.duration).toDate();
 								}
 							}
-						});						
+						});
 					}
 					if (minuteDelta > 1) {
 						moveDisplacedEvents(false);
 					} else {
 						moveDisplacedEvents(true);
-					}					
+					}
 				}
 				$scope.$apply(function() {
 					moveEvent(event);
@@ -194,7 +194,7 @@ gtdPanic.controller('ScheduleController', function($scope, $http, $date, savedSc
 					end: event.end,
 					_id: event._id,
 				}
-			})	
+			})
 		}
 
 		function redirect(schedule) {
@@ -213,7 +213,7 @@ gtdPanic.controller('ScheduleController', function($scope, $http, $date, savedSc
 			var postData = {
 				events: eventsPostData($scope.events)
 			};
-			$http.post('/schedules', postData).success(redirect);			
+			$http.post('/schedules', postData).success(redirect);
 		}
 	};
 
@@ -221,7 +221,7 @@ gtdPanic.controller('ScheduleController', function($scope, $http, $date, savedSc
 		function clearEvents() {
 			$scope.events.length = 0;
 			if (!!$scope.allEvents) {
-				$scope.allEvents.length = 0;			
+				$scope.allEvents.length = 0;
 			}
 		}
 

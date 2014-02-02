@@ -133,7 +133,7 @@ describe('ScheduleController', function() {
           events: []
       };
       $controller('ScheduleController', {
-        $scope: scope, 
+        $scope: scope,
         savedSchedule: savedSchedule
       });
 			savedSchedule.events.push.apply(savedSchedule.events, scope.events);
@@ -226,7 +226,7 @@ describe('ScheduleController', function() {
 			var minuteDelta = 150;
 			var movedEvent = scope.events[0];
 			// Moved event is already updated by the time eventDrop() fires
-			movedEvent.start = new Date(2020, 3, 3, 14, 30, 0); 
+			movedEvent.start = new Date(2020, 3, 3, 14, 30, 0);
 			movedEvent.end = new Date(2020, 3, 3, 15, 0, 0);
 			scope.uiConfig.calendar.eventDrop(movedEvent, null, minuteDelta);
 			// Is currently moved to right before the 3rd event (may be bad)
@@ -296,16 +296,16 @@ describe('ScheduleController', function() {
               title: 'an event'
             }]
         };
-        
+
         $controller('ScheduleController', {
-          $scope: scope, 
+          $scope: scope,
           savedSchedule: savedSchedule
         });
       }));
 
       it('deletes the schedule when one has been saved', inject(function($httpBackend) {
         $httpBackend.expectDELETE('/schedules/scheduleid').respond(200);
-        
+
         scope.events.push(savedSchedule.events[0]);
 
         var oldEvents = scope.events;
@@ -329,7 +329,7 @@ describe('ScheduleController', function() {
         expect($location.path()).toEqual('/');
       }));
     });
-   
+
     it('can clear events even if none have been loaded from csv', inject(function($httpBackend) {
       scope.events.push({
         title: 'an event'
@@ -346,4 +346,4 @@ describe('ScheduleController', function() {
 
 	// Test randomize events
 
-});	
+});
