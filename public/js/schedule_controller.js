@@ -204,7 +204,6 @@ gtdPanic.controller('ScheduleController', function($scope, $http, $date, savedSc
 			$http.delete('/schedules/' + savedSchedule._id).success(function() {
 				clearEvents();
 				$location.path('/');
-				// $state.go('home');
 			});
 		} else {
 			clearEvents();

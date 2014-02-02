@@ -48,20 +48,6 @@ exports.show = function(db) {
   }
 }
 
-// exports.today = function(req, res) {
-//   var start = new Date();
-//   start.setHours(0);
-//   start.setMinutes(0);
-//   start.setSeconds(0);
-//   var end = new Date();
-//   end.setHours(23);
-//   end.setMinutes(59);
-//   end.setSeconds(59);
-//   Event.findAll({where: ['start > ? and start < ?', start, end]}).success(function(events) {
-//     res.json(events);
-//   });
-// }
-
 exports.clear = function(db) {
   return function(req, res) {
     var schedules = db.get('schedules');
