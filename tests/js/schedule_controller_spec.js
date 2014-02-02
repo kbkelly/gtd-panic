@@ -52,6 +52,36 @@ describe('ScheduleController', function() {
 			expect(scope.eventSources[0]).toEqual(events);
 		});
 
+    it('does not overlap incoming events with existing events', function() {
+      var incomingEvents = [
+        {title: 'first event'},
+        {title: 'second event'}
+      ];
+      var existingEvent = {
+        title: 'existing event'
+      };
+      // the main beforeEach sets the time to 9am
+      // the existing event is 9:30-10am
+      // incoming events should show at 9am and 10am
+      var existingEvent = {
+        title: 'existing event',
+        start: new Date(2020, 3, 3, 9, 30, 0),
+        end: new Date(2020, 3, 3, 10, 0, 0),
+        duration: 1800
+      }
+      scope.events.push(existingEvent);
+      scope.allEvents = incomingEvents;
+      scope.$apply();
+      expect(incomingEvents[0].start.getHours()).toEqual(9);
+      expect(incomingEvents[0].start.getMinutes()).toEqual(0);
+      expect(incomingEvents[0].end.getHours()).toEqual(9);
+      expect(incomingEvents[0].end.getMinutes()).toEqual(30);
+      expect(incomingEvents[1].start.getHours()).toEqual(10);
+      expect(incomingEvents[1].start.getMinutes()).toEqual(0);
+      expect(incomingEvents[1].end.getHours()).toEqual(10);
+      expect(incomingEvents[1].end.getMinutes()).toEqual(30);
+    });
+
 		it('allows events to have a predefined duration', function() {
 			var events = [
 				{title: 'first event', duration: 3600},
