@@ -12,5 +12,5 @@ gtdPanic.controller('UploadController', function($scope, $upload, $rootScope) {
       .error(function() {
         console.error('File failed to upload');
       });
-  }
+  };
 });

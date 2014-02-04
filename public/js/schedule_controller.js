@@ -109,7 +109,7 @@ gtdPanic.controller('ScheduleController', function($scope, $http, $date, savedSc
             var eventToMove = $scope.events[i];
             eventToMove.start = moment(eventToMove.start).add('seconds', secondsDelta).toDate();
             eventToMove.end = moment(eventToMove.end).add('seconds', secondsDelta).toDate();
-          };
+          }
         }
       }
     }
@@ -194,7 +194,7 @@ gtdPanic.controller('ScheduleController', function($scope, $http, $date, savedSc
 
   $scope.remove = function($index) {
     $scope.events.splice($index, 1);
-  }
+  };
 
   $scope.save = function() {
     function eventsPostData(events) {
@@ -204,8 +204,8 @@ gtdPanic.controller('ScheduleController', function($scope, $http, $date, savedSc
           start: event.start,
           end: event.end,
           _id: event._id,
-        }
-      })
+        };
+      });
     }
 
     function redirect(schedule) {
@@ -214,14 +214,15 @@ gtdPanic.controller('ScheduleController', function($scope, $http, $date, savedSc
       $location.replace();
     }
 
+    var postData;
     if (savedSchedule) {
-      var postData = {
+      postData = {
         _id: savedSchedule._id,
         events: eventsPostData($scope.events)
       };
       $http.put('/schedules/' + savedSchedule._id, postData);
     } else {
-      var postData = {
+      postData = {
         events: eventsPostData($scope.events)
       };
       $http.post('/schedules', postData).success(redirect);
@@ -244,5 +245,5 @@ gtdPanic.controller('ScheduleController', function($scope, $http, $date, savedSc
     } else {
       clearEvents();
     }
-  }
+  };
 });
