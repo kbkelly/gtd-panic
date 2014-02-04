@@ -14,7 +14,7 @@ exports.create = function(db) {
       }
     });
   };
-}
+};
 
 exports.update = function(db) {
   return function(req, res) {
@@ -22,7 +22,7 @@ exports.update = function(db) {
     function scrubInput(json) {
       return {
         events: json.events
-      }
+      };
     }
     schedules.findAndModify({_id: req.params.id}, {$set: scrubInput(req.body)}, function(err, schedule) {
       if (err) {
@@ -31,8 +31,8 @@ exports.update = function(db) {
         res.send(schedule);
       }
     });
-  }
-}
+  };
+};
 
 // Display a previously created schedule
 exports.show = function(db) {
@@ -45,10 +45,10 @@ exports.show = function(db) {
         res.send(404);
       } else {
         res.json(schedule);
-      }      
+      }
     });
-  }
-}
+  };
+};
 
 exports.clear = function(db) {
   return function(req, res) {
@@ -58,7 +58,7 @@ exports.clear = function(db) {
         res.send(err);
       } else {
         res.send(200);
-      };
+      }
     });
-  }
-}
+  };
+};

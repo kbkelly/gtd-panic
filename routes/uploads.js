@@ -5,7 +5,7 @@ var fs = require('fs'),
 exports.create = function(req, res){
 	var results = [];
 	csv()
-	.from.path(req.files.file.path, 
+	.from.path(req.files.file.path,
 		{ delimiter: ',', escape: '"' })
 	.on('record', function(row, index){
 		// Skip header row
@@ -15,7 +15,7 @@ exports.create = function(req, res){
 
 		var event = convertRowToEvent(row);
 		if (event) {
-	  	results.push(event);			
+			results.push(event);
 		}
 	})
 	.on('end', function(count) {
@@ -49,8 +49,8 @@ exports.create = function(req, res){
 		return {
 			title: row[2],
 			duration: duration
-		}
-	}	
+		};
+	}
 
 	function durationToSeconds(duration) {
 		var timeRegex = /(\d+)m/;
