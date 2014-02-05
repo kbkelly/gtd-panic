@@ -26,6 +26,7 @@ script(type='text/ng-template', id='home.html')
       input(type='submit', value='Save', ng-click='save()')
       input(type='submit', value='Clear', ng-click='clear()')
   .row
+    .event-count [[events.length]] events
     ul.col-md-3.hidden-sm.hidden-xs.event-list
       li.ng-scope(ng-repeat='e in events | orderBy:"start"')
         .alert.event-entry.ng-binding
