@@ -35,8 +35,7 @@ describe('ScheduleController', function() {
 				{title: 'first event'},
 				{title: 'second event'}
 			];
-			scope.allEvents = events;
-			scope.$apply();
+			scope.$emit('uploadedEvents', events);
 			expect(scope.events.length).toEqual(2);
 			expect(events[0].start).toBeDefined();
 			expect(events[0].end).toBeDefined();
@@ -61,8 +60,7 @@ describe('ScheduleController', function() {
         {title: 'second event'}
       ];
 
-      scope.allEvents = incomingEvents;
-      scope.$apply();
+      scope.$emit('uploadedEvents', incomingEvents);
       expect(incomingEvents[0].start.getHours()).toEqual(9);
       expect(incomingEvents[0].start.getMinutes()).toEqual(0);
     }));
@@ -85,8 +83,7 @@ describe('ScheduleController', function() {
         duration: 1800
       }
       scope.events.push(existingEvent);
-      scope.allEvents = incomingEvents;
-      scope.$apply();
+      scope.$emit('uploadedEvents', incomingEvents);
       expect(incomingEvents[0].start.getHours()).toEqual(9);
       expect(incomingEvents[0].start.getMinutes()).toEqual(0);
       expect(incomingEvents[0].end.getHours()).toEqual(9);
@@ -102,9 +99,7 @@ describe('ScheduleController', function() {
 				{title: 'first event', duration: 3600},
 				{title: 'second event'}
 			];
-			// Inject the events
-			scope.allEvents = events;
-			scope.$apply();
+			scope.$emit('uploadedEvents', events);
 
 			expect(events[0].start.getHours()).toEqual(9);
 			expect(events[0].start.getMinutes()).toEqual(0);
@@ -292,12 +287,11 @@ describe('ScheduleController', function() {
 
 	it('allows a cutoff time to prevent events after a given time', function() {
 		scope.uiConfig.cutoffTime = 10;
-		scope.allEvents = [
+		scope.$emit('uploadedEvents', [
 			{title: 'first'},
 			{title: 'second'},
 			{title: 'past cutoff'}
-		];
-		scope.$apply();
+		]);
 		expect(scope.events.length).toEqual(2);
 	});
 

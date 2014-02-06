@@ -1,4 +1,4 @@
-gtdPanic.controller('ScheduleController', function($scope, $http, $date, savedSchedule, $location) {
+gtdPanic.controller('ScheduleController', function($scope, $http, $date, savedSchedule, $location, $rootScope) {
   function shuffle(array) {
       var counter = array.length, temp, index;
 
@@ -123,7 +123,7 @@ gtdPanic.controller('ScheduleController', function($scope, $http, $date, savedSc
     $scope.events.push.apply($scope.events, savedSchedule.events);
   }
 
-  $scope.$watch('allEvents', function(allEvents) {
+  $rootScope.$on('uploadedEvents', function(name, allEvents) {
     if (!allEvents) {
       return;
     }
