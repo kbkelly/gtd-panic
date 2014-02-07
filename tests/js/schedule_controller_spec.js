@@ -1,16 +1,22 @@
 describe('ScheduleController', function() {
 	beforeEach(module('GtdPanic'));
 
-	var scope, controller, currentDate, currentMoment;
+	var scope, controller, currentDate, currentMoment, fakeWindow;
 	beforeEach(inject(function($rootScope, $controller, $httpBackend) {
 		currentMoment = moment(new Date(2020, 3, 3, 9, 0, 0));
     currentDate = currentMoment.toDate(); // 9am
 		scope = $rootScope.$new();
+    fakeWindow = {
+      confirm: function() {
+        return true;
+      }
+    };
 
 		controller = $controller('ScheduleController', {
 			$scope: scope,
 			$date: currentDate,
-			savedSchedule: null
+			savedSchedule: null,
+      $window: fakeWindow
 		});
 	}));
 
@@ -308,7 +314,8 @@ describe('ScheduleController', function() {
 
         $controller('ScheduleController', {
           $scope: scope,
-          savedSchedule: savedSchedule
+          savedSchedule: savedSchedule,
+          $window: fakeWindow
         });
       }));
 

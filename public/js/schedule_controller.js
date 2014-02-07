@@ -1,4 +1,4 @@
-gtdPanic.controller('ScheduleController', function($scope, $http, $date, savedSchedule, $location, $rootScope) {
+gtdPanic.controller('ScheduleController', function($scope, $http, $date, savedSchedule, $location, $rootScope, $window) {
   function shuffle(array) {
       var counter = array.length, temp, index;
 
@@ -230,6 +230,10 @@ gtdPanic.controller('ScheduleController', function($scope, $http, $date, savedSc
   };
 
   $scope.clear = function() {
+    if (!$window.confirm('Are you sure you want to clear your schedule? This cannot be undone.')) {
+      return;
+    }
+
     function clearEvents() {
       $scope.events.length = 0;
       if (!!$scope.allEvents) {
