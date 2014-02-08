@@ -123,12 +123,12 @@ gtdPanic.controller('ScheduleController', function($scope, $http, $date, savedSc
     $scope.events.push.apply($scope.events, savedSchedule.events);
   }
 
-  $rootScope.$on('uploadedEvents', function(name, allEvents) {
-    if (!allEvents) {
+  $rootScope.$on('uploadedEvents', function(name, uploadedEvents) {
+    if (!uploadedEvents) {
       return;
     }
     if ($scope.uiConfig.randomize) {
-      allEvents = shuffle(allEvents);
+      uploadedEvents = shuffle(uploadedEvents);
     }
 
     var startTime = moment($date);
@@ -189,7 +189,7 @@ gtdPanic.controller('ScheduleController', function($scope, $http, $date, savedSc
       // console.log(event);
       $scope.events.push(event);
     }
-    angular.forEach(allEvents, setupEvent);
+    angular.forEach(uploadedEvents, setupEvent);
   });
 
   $scope.remove = function($index) {
@@ -236,9 +236,6 @@ gtdPanic.controller('ScheduleController', function($scope, $http, $date, savedSc
 
     function clearEvents() {
       $scope.events.length = 0;
-      if (!!$scope.allEvents) {
-        $scope.allEvents.length = 0;
-      }
     }
 
     if (savedSchedule) {

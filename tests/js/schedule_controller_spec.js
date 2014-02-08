@@ -325,16 +325,12 @@ describe('ScheduleController', function() {
         scope.events.push(savedSchedule.events[0]);
 
         var oldEvents = scope.events;
-        scope.allEvents = scope.events;
-        var oldAllEvents = scope.allEvents;
 
         scope.clear();
         $httpBackend.flush();
         // angular requires maintaining object references
         expect(scope.events === oldEvents).toBeTruthy();
-        expect(scope.allEvents === oldAllEvents).toBeTruthy();
         expect(scope.events.length).toEqual(0);
-        expect(scope.allEvents.length).toEqual(0);
       }));
 
       it('sets the state back to home when clearing a saved schedule', inject(function($httpBackend, $location) {
