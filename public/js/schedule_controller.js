@@ -58,12 +58,14 @@ gtdPanic.controller('ScheduleController', function($scope, $http, $date, savedSc
           var newStartTime = moment(event.start);
           var oldStartTime = newStartTime.subtract('seconds', secondDelta);
           var newEndTime = moment(event.end);
+          var originalEventRange = moment.twix(oldStartTime, newEndTime);
           function moveDisplacedEvents(moveForward) {
             // Need to displace some existing events
             angular.forEach($scope.events, function(movingEvent) {
               if (movingEvent === event) {
                 return;
               }
+              var movingEventRange = moment.twix(movingEvent.start, movingEvent.end);
               var movingEventStart = moment(movingEvent.start);
               var movingEventEnd = moment(movingEvent.end);
               if (moveForward) {
@@ -77,12 +79,9 @@ gtdPanic.controller('ScheduleController', function($scope, $http, $date, savedSc
                   movingEvent.end = movingEventEnd + event.duration;
                 }
               } else {
-                if ((movingEventStart.isAfter(oldStartTime) ||
-                   movingEventStart.isSame(oldStartTime)) &&
-                  (movingEventEnd.isBefore(newEndTime) ||
-                   movingEventEnd.isSame(newEndTime))) {
-                  movingEvent.start = movingEventStart.subtract('seconds', event.duration).toDate();
-                  movingEvent.end = movingEventEnd.subtract('seconds', event.duration).toDate();
+                if (originalEventRange.engulfs(movingEventRange)) {
+                  movingEvent.start = moment(movingEvent.start).subtract('seconds', event.duration).toDate();
+                  movingEvent.end = moment(movingEvent.end).subtract('seconds', event.duration).toDate();
                 }
               }
             });
