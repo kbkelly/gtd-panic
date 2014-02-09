@@ -27,13 +27,14 @@ module.exports = function(config) {
         'public/vendor/twix.js',
         'public/components/underscore/underscore.js',
         'public/js/*.js',
+        'tests/js/helpers.js',
         'tests/js/*spec.js'
     ],
 
 
     // list of files to exclude
     exclude: [
-      
+
     ],
 
 
