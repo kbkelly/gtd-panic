@@ -69,39 +69,49 @@ gtdPanic.controller('ScheduleController', function($scope, $http, $date, savedSc
             oldStartTime.add('seconds', Math.abs(secondDelta));
           }
           var originalEventRange = moment.twix(event.start, event.end);
-          function findOverlappingEvents(event) {
-            var overlapping = [];
-            var eventRange = moment.twix(event.start, event.end);
-            angular.forEach($scope.events, function(otherEvent) {
-              if (otherEvent === event) {
-                return;
-              }
-              var otherRange = moment.twix(otherEvent.start, otherEvent.end);
-              if (otherRange.overlaps(eventRange)) {
-                overlapping.push(otherEvent);
-              }
-            });
-            return overlapping;
-          }
-
-          function moveOverlappingEvents(anchoredEvent) {
-            var overlapping = findOverlappingEvents(event);
-            if (overlapping.length) {
-              angular.forEach(overlapping, function(overlappingEvent) {
-                moveEventUntilNotOverlapping(overlappingEvent, event);
-              });
-            }
-          }
-
-          function moveEventUntilNotOverlapping(eventToMove, overlappedEvent) {
-            var amountToMove = overlappedEvent.duration;
-            eventToMove.start = moment(eventToMove.start).add('seconds', amountToMove).toDate();
-            eventToMove.end = moment(eventToMove.end).add('seconds', amountToMove).toDate();
-          }
-
           moveOverlappingEvents(event);
-
         }
+
+        function moveEventUntilNotOverlapping(eventToMove, anchoredEvent) {
+          // A = event to move
+          // B = anchored event
+          // dist = A.start - B.start + B.duration
+          var startRange = moment.twix(eventToMove.start, anchoredEvent.start);
+          // console.log('range length', startRange.length('seconds'));
+          // console.log('anchored event', anchoredEvent);
+          var amountToMove = startRange.length('seconds') + anchoredEvent.duration;
+          // console.log('moving', eventToMove, 'by', amountToMove);
+          eventToMove.start = moment(eventToMove.start).add('seconds', amountToMove).toDate();
+          eventToMove.end = moment(eventToMove.end).add('seconds', amountToMove).toDate();
+        }
+
+        function moveOverlappingEvents(anchoredEvent) {
+          var overlapping = findOverlappingEvents(anchoredEvent);
+          // console.log(overlapping);
+          if (overlapping.length) {
+            angular.forEach(overlapping, function(overlappingEvent) {
+              moveEventUntilNotOverlapping(overlappingEvent, anchoredEvent);
+            });
+            moveOverlappingEvents(overlapping[0]);
+          }
+        }
+
+        function findOverlappingEvents(event) {
+          var overlapping = [];
+          var eventRange = moment.twix(event.start, event.end);
+          angular.forEach($scope.events, function(otherEvent) {
+            if (otherEvent === event) {
+              return;
+            }
+            var otherRange = moment.twix(otherEvent.start, otherEvent.end);
+            // console.log('checking if', otherEvent, 'overlaps', event, '=', otherRange.overlaps(eventRange));
+            if (otherRange.overlaps(eventRange)) {
+              overlapping.push(otherEvent);
+            }
+          });
+          return overlapping;
+        }
+
         $scope.$apply(function() {
           moveEvent(event);
           sortEvents();
@@ -110,6 +120,7 @@ gtdPanic.controller('ScheduleController', function($scope, $http, $date, savedSc
       eventResize: function(event,dayDelta,minuteDelta,revertFunc) {
         // Change the duration of this event and fix the start/end times for all events after this one
         var secondsDelta = minuteDelta * 60;
+        event.duration = event.duration + secondsDelta;
         $scope.$apply(function() {
           var index = $scope.events.indexOf(event);
           moveEventsAfter(index);
@@ -214,6 +225,7 @@ gtdPanic.controller('ScheduleController', function($scope, $http, $date, savedSc
           start: event.start,
           end: event.end,
           _id: event._id,
+          duration: event.duration
         };
       });
     }

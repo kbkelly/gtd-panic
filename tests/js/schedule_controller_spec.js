@@ -220,12 +220,11 @@ describe('ScheduleController', function() {
 					end: new Date(2020, 3, 3, 12, 30, 0),
 					duration: 1800
 				},
-				// Twice as long
 				{
 					title: 'second event',
 					start: new Date(2020, 3, 3, 12, 30, 0),
-					end: new Date(2020, 3, 3, 13, 30, 0),
-					duration: 3600
+					end: new Date(2020, 3, 3, 14, 0, 0),
+					duration: 5400
 				},
 				// Has a gap between it and last event
 				{
@@ -261,8 +260,8 @@ describe('ScheduleController', function() {
 			expect(scope.events[0].title).toEqual('second event');
 			expect(scope.events[0].start.getHours()).toEqual(12);
 			expect(scope.events[0].start.getMinutes()).toEqual(30);
-			expect(scope.events[0].end.getHours()).toEqual(13);
-			expect(scope.events[0].end.getMinutes()).toEqual(30);
+			expect(scope.events[0].end.getHours()).toEqual(14);
+			expect(scope.events[0].end.getMinutes()).toEqual(0);
 
       // First event is in the right order in the list
       expect(scope.events[1].title).toEqual('first event');
@@ -279,6 +278,27 @@ describe('ScheduleController', function() {
       expect(scope.events[2].end.getMinutes()).toEqual(0);
 		});
 
+    it('displaces events by the length of the displacing event', function() {
+      // Moving the 2nd event to before the start of the 1st
+      var minuteDelta = -30;
+      var movedEvent = scope.events[1];
+      movedEvent.start = new Date(2020, 3, 3, 11, 30, 0);
+      movedEvent.end = new Date(2020, 3, 3, 13, 0, 0);
+      scope.uiConfig.calendar.eventDrop(movedEvent, null, minuteDelta);
+
+      expect(scope.events[0].title).toEqual('second event');
+      expect(scope.events[0].start.getHours()).toEqual(11);
+      expect(scope.events[0].start.getMinutes()).toEqual(30);
+      expect(scope.events[0].end.getHours()).toEqual(13);
+      expect(scope.events[0].end.getMinutes()).toEqual(0);
+
+      expect(scope.events[1].title).toEqual('first event');
+      expect(scope.events[1].start.getHours()).toEqual(13);
+      expect(scope.events[1].start.getMinutes()).toEqual(0);
+      expect(scope.events[1].end.getHours()).toEqual(13);
+      expect(scope.events[1].end.getMinutes()).toEqual(30);
+    });
+
 		it('can move events backwards in time', function() {
       // Move 3rd event to the beginning of 2nd event (from 3pm -> 12:30)
       var minuteDelta = -150;
@@ -291,8 +311,8 @@ describe('ScheduleController', function() {
       expect(scope.events[2].title).toEqual('second event');
       expect(scope.events[2].start.getHours()).toEqual(13);
       expect(scope.events[2].start.getMinutes()).toEqual(30);
-      expect(scope.events[2].end.getHours()).toEqual(14);
-      expect(scope.events[2].end.getMinutes()).toEqual(30);
+      expect(scope.events[2].end.getHours()).toEqual(15);
+      expect(scope.events[2].end.getMinutes()).toEqual(0);
     });
 	});
 
