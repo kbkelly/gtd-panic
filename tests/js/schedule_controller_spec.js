@@ -317,13 +317,13 @@ describe('ScheduleController', function() {
 	});
 
 	describe('resizing an event', function() {
-		it('adjusts all events after the resized one', function() {
+		it('pushes overlapping events forward in time', function() {
 			scope.events = [
 				{
 					title: 'first event',
 					start: new Date(2020, 3, 3, 12, 0, 0),
 					end: new Date(2020, 3, 3, 12, 30, 0),
-					duration: 1800
+					duration: 5400
 				},
 				// Twice as long
 				{
@@ -331,11 +331,28 @@ describe('ScheduleController', function() {
 					start: new Date(2020, 3, 3, 12, 30, 0),
 					end: new Date(2020, 3, 3, 13, 30, 0),
 					duration: 3600
-				}
+				},
+        {
+          title: 'third event',
+          start: new Date(2020, 3, 3, 15, 0, 0),
+          end: new Date(2020, 3, 3, 15, 30, 0)
+        }
 			];
-			scope.uiConfig.calendar.eventResize(scope.events[0], null, 60);
+      var resizedEvent = scope.events[0];
+      resizedEvent.start = new Date(2020, 3, 3, 12, 0, 0);
+      resizedEvent.end = new Date(2020, 3, 3, 13, 30, 0);
+			scope.uiConfig.calendar.eventResize(resizedEvent, null, 60);
+      expect(scope.events[1].title).toEqual('second event');
 			expect(scope.events[1].start.getHours()).toEqual(13);
+      expect(scope.events[1].start.getMinutes()).toEqual(30);
 			expect(scope.events[1].end.getHours()).toEqual(14);
+      expect(scope.events[1].end.getMinutes()).toEqual(30);
+
+      expect(scope.events[2].title).toEqual('third event');
+      expect(scope.events[2].start.getHours()).toEqual(15);
+      expect(scope.events[2].start.getMinutes()).toEqual(0);
+      expect(scope.events[2].end.getHours()).toEqual(15);
+      expect(scope.events[2].end.getMinutes()).toEqual(30);
 		});
 	});
 

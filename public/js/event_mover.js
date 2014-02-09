@@ -17,17 +17,13 @@ gtdPanic.service('eventMover', function() {
       // B = anchored event
       // dist = A.start - B.start + B.duration
       var startRange = moment.twix(eventToMove.start, anchoredEvent.start);
-      // console.log('range length', startRange.length('seconds'));
-      // console.log('anchored event', anchoredEvent);
       var amountToMove = startRange.length('seconds') + anchoredEvent.duration;
-      // console.log('moving', eventToMove, 'by', amountToMove);
       eventToMove.start = moment(eventToMove.start).add('seconds', amountToMove).toDate();
       eventToMove.end = moment(eventToMove.end).add('seconds', amountToMove).toDate();
     }
 
     function moveOverlappingEvents(anchoredEvent) {
       var overlapping = findOverlappingEvents(anchoredEvent);
-      // console.log(overlapping);
       if (overlapping.length) {
         angular.forEach(overlapping, function(overlappingEvent) {
           moveEventUntilNotOverlapping(overlappingEvent, anchoredEvent);

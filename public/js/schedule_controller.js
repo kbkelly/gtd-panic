@@ -42,21 +42,10 @@ gtdPanic.controller('ScheduleController', function($scope, $http, $date, savedSc
           eventMover.displaceEvents($scope.events, event);
         });
       },
-      eventResize: function(event,dayDelta,minuteDelta) {
-        // Change the duration of this event and fix the start/end times for all events after this one
-        var secondsDelta = minuteDelta * 60;
-        event.duration = event.duration + secondsDelta;
+      eventResize: function(event, dayDelta, minuteDelta) {
         $scope.$apply(function() {
-          var index = $scope.events.indexOf(event);
-          moveEventsAfter(index);
+          eventMover.displaceEvents($scope.events, event);
         });
-        function moveEventsAfter(index) {
-          for (var i = index + 1; i < $scope.events.length; i++) {
-            var eventToMove = $scope.events[i];
-            eventToMove.start = moment(eventToMove.start).add('seconds', secondsDelta).toDate();
-            eventToMove.end = moment(eventToMove.end).add('seconds', secondsDelta).toDate();
-          }
-        }
       }
     }
   };
