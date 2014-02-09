@@ -27,11 +27,11 @@ gtdPanic.controller('ScheduleController', function($scope, $http, $date, savedSc
       ignoreTimezone: false,
       minTime: moment($date).hour(),
       dayClick: function(date) {
+        var start = new Date(date);
         var newEvent = {
           title: 'New Event',
-          start: moment(date).unix(),
-          duration: 1800, // 30 minutes
-          end: moment(date).add('minutes', 30).unix()
+          start: start,
+          end: moment(start).add('minutes', 30).toDate()
         };
         $scope.$apply(function() {
           $scope.events.push(newEvent);

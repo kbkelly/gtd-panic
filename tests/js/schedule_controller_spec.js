@@ -202,12 +202,11 @@ describe('ScheduleController', function() {
 	describe('clicking anywhere on the calendar', function() {
 		it('creates a new event', function() {
 			expect(scope.events.length).toEqual(0);
-			var time = new Date();
-			scope.uiConfig.calendar.dayClick(time);
-			var startUnixTimestamp = moment(time).unix();
-			expect(scope.events[0].start).toEqual(startUnixTimestamp);
-			expect(scope.events[0].end).toEqual(startUnixTimestamp + 1800);
-      expect(scope.events[0].duration).toEqual(1800);
+			var start = new Date(2020, 3, 3, 14, 25, 0);
+      var end = new Date(2020, 3, 3, 14, 55, 0);
+			scope.uiConfig.calendar.dayClick(start);
+			expect(scope.events[0].start).toEqual(start);
+			expect(scope.events[0].end).toEqual(end);
 		});
 	});
 
