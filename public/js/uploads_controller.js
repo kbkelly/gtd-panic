@@ -6,7 +6,7 @@ gtdPanic.controller('UploadController', function($scope, $upload, $rootScope) {
           method: 'POST',
           file: $file,
       })
-        .success(function(events, status, headers, config) {
+        .success(function(events) {
         $rootScope.$emit('uploadedEvents', events);
       })
       .error(function() {

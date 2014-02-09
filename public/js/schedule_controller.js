@@ -26,7 +26,7 @@ gtdPanic.controller('ScheduleController', function($scope, $http, $date, savedSc
       defaultView: 'agendaDay',
       ignoreTimezone: false,
       minTime: moment($date).hour(),
-      dayClick: function(date, allDay, jsEvent, view) {
+      dayClick: function(date) {
         var newEvent = {
           title: 'New Event',
           start: moment(date).unix(),
@@ -37,12 +37,12 @@ gtdPanic.controller('ScheduleController', function($scope, $http, $date, savedSc
           $scope.events.push(newEvent);
         });
       },
-      eventDrop: function(event, dayDelta, minuteDelta) {
+      eventDrop: function(event) {
         $scope.$apply(function() {
           eventMover.displaceEvents($scope.events, event);
         });
       },
-      eventResize: function(event,dayDelta,minuteDelta,revertFunc) {
+      eventResize: function(event,dayDelta,minuteDelta) {
         // Change the duration of this event and fix the start/end times for all events after this one
         var secondsDelta = minuteDelta * 60;
         event.duration = event.duration + secondsDelta;
