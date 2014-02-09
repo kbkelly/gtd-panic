@@ -82,12 +82,15 @@ gtdPanic.controller('ScheduleController', function($scope, $http, $date, savedSc
 
     function setupEventDuration(event) {
       // Duration is in seconds for some reason
-      if (!event.duration) {
-        event.duration = $scope.uiConfig.defaultDuration * 60;
+      var durationInSeconds;
+      if (event.duration) {
+        durationInSeconds = event.duration;
+      } else {
+        durationInSeconds = $scope.uiConfig.defaultDuration * 60;
       }
-      startTime = getNextAvailableStartTime(startTime, event.duration);
+      startTime = getNextAvailableStartTime(startTime, durationInSeconds);
       event.start = startTime.clone().toDate();
-      startTime = startTime.add('seconds', event.duration);
+      startTime.add('seconds', durationInSeconds);
       event.end = startTime.clone().toDate();
     }
 
@@ -102,7 +105,7 @@ gtdPanic.controller('ScheduleController', function($scope, $http, $date, savedSc
 
       while (idx < $scope.events.length - 1) {
         var existingEvent = $scope.events[idx];
-        var existingEventRange = eventRange(existingEvent.start, existingEvent.duration);
+        var existingEventRange = moment.twix(existingEvent.start, existingEvent.end);
         // If incoming event overlaps, bump startMoment to the
         // existing event's end time
         // console.log(existingEventRange.simpleFormat(), incomingEventRange.simpleFormat(), existingEventRange.overlaps(incomingEventRange));
@@ -139,8 +142,7 @@ gtdPanic.controller('ScheduleController', function($scope, $http, $date, savedSc
           title: event.title,
           start: event.start,
           end: event.end,
-          _id: event._id,
-          duration: event.duration
+          _id: event._id
         };
       });
     }
