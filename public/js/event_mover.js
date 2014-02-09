@@ -1,5 +1,5 @@
 gtdPanic.service('eventMover', function() {
-  this.displaceEvents = function(movableEvents, anchorEvent, minuteDelta) {
+  this.displaceEvents = function(movableEvents, anchorEvent) {
     function sortEvents() {
       movableEvents.sort(function sortByStartTime(a, b) {
         if (a.start < b.start) {
@@ -52,25 +52,8 @@ gtdPanic.service('eventMover', function() {
       return overlapping;
     }
 
-    // When moving an event,
-    //    if +delta (event moved forward)
-    //      move all events between original and new index backwards by event's duration
-    //    if -delta
-    //      move all events between original and new index forwards by event's duration
     sortEvents();
-    var secondDelta = minuteDelta * 60;
-    var newStartTime = moment(anchorEvent.start);
-    // If the event moved forward, its old start time is in the past
-    // else if it moved backwards, its old start time was in the future
-    var oldStartTime = moment(newStartTime.toDate());
-    var eventMovedForward = minuteDelta > 0;
-    if (eventMovedForward) {
-      oldStartTime.subtract('seconds', Math.abs(secondDelta));
-    } else {
-      oldStartTime.add('seconds', Math.abs(secondDelta));
-    }
-    var originalEventRange = moment.twix(anchorEvent.start, anchorEvent.end);
     moveOverlappingEvents(anchorEvent);
     sortEvents();
-  }
+  };
 });

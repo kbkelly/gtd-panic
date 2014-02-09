@@ -39,7 +39,7 @@ gtdPanic.controller('ScheduleController', function($scope, $http, $date, savedSc
       },
       eventDrop: function(event, dayDelta, minuteDelta) {
         $scope.$apply(function() {
-          eventMover.displaceEvents($scope.events, event, minuteDelta);
+          eventMover.displaceEvents($scope.events, event);
         });
       },
       eventResize: function(event,dayDelta,minuteDelta,revertFunc) {
