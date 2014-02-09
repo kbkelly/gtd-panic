@@ -43,6 +43,7 @@ gtdPanic.controller('ScheduleController', function($scope, $http, $date, savedSc
         });
       },
       eventResize: function(event, dayDelta, minuteDelta) {
+        event.duration += minuteDelta * 60;
         $scope.$apply(function() {
           eventMover.displaceEvents($scope.events, event);
         });

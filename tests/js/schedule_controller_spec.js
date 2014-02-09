@@ -323,7 +323,7 @@ describe('ScheduleController', function() {
 					title: 'first event',
 					start: new Date(2020, 3, 3, 12, 0, 0),
 					end: new Date(2020, 3, 3, 12, 30, 0),
-					duration: 5400
+					duration: 1800
 				},
 				// Twice as long
 				{
@@ -342,11 +342,7 @@ describe('ScheduleController', function() {
       resizedEvent.start = new Date(2020, 3, 3, 12, 0, 0);
       resizedEvent.end = new Date(2020, 3, 3, 13, 30, 0);
 			scope.uiConfig.calendar.eventResize(resizedEvent, null, 60);
-      expect(scope.events[1].title).toEqual('second event');
-			expect(scope.events[1].start.getHours()).toEqual(13);
-      expect(scope.events[1].start.getMinutes()).toEqual(30);
-			expect(scope.events[1].end.getHours()).toEqual(14);
-      expect(scope.events[1].end.getMinutes()).toEqual(30);
+      expectEventPlacement(scope.events, 1, 'second event', 13, 30, 14, 30);
 
       expect(scope.events[2].title).toEqual('third event');
       expect(scope.events[2].start.getHours()).toEqual(15);
