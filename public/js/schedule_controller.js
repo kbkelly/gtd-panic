@@ -38,13 +38,7 @@ gtdPanic.controller('ScheduleController', function($scope, $http, $date, savedSc
         });
       },
       eventDrop: function(event, dayDelta, minuteDelta) {
-        function moveEvent(event) {
-          // When moving an event,
-          //  insert the event into the right place in the list (original index & new index)
-          //    if +delta (event moved forward)
-          //      move all events between original and new index backwards by event's duration
-          //    if -delta
-          //      move all events between original and new index forwards by event's duration
+        function sortEvents() {
           $scope.events.sort(function sortByStartTime(a, b) {
             if (a.start < b.start) {
               return -1;
@@ -54,46 +48,63 @@ gtdPanic.controller('ScheduleController', function($scope, $http, $date, savedSc
               return 0;
             }
           });
+        }
+
+        function moveEvent(event) {
+          // When moving an event,
+          //    if +delta (event moved forward)
+          //      move all events between original and new index backwards by event's duration
+          //    if -delta
+          //      move all events between original and new index forwards by event's duration
+          sortEvents();
           var secondDelta = minuteDelta * 60;
           var newStartTime = moment(event.start);
-          var oldStartTime = newStartTime.subtract('seconds', secondDelta);
-          var newEndTime = moment(event.end);
-          var originalEventRange = moment.twix(oldStartTime, newEndTime);
-          function moveDisplacedEvents(moveForward) {
-            // Need to displace some existing events
-            angular.forEach($scope.events, function(movingEvent) {
-              if (movingEvent === event) {
+          // If the event moved forward, its old start time is in the past
+          // else if it moved backwards, its old start time was in the future
+          var oldStartTime = moment(newStartTime.toDate());
+          var eventMovedForward = minuteDelta > 0;
+          if (eventMovedForward) {
+            oldStartTime.subtract('seconds', Math.abs(secondDelta));
+          } else {
+            oldStartTime.add('seconds', Math.abs(secondDelta));
+          }
+          var originalEventRange = moment.twix(event.start, event.end);
+          function findOverlappingEvents(event) {
+            var overlapping = [];
+            var eventRange = moment.twix(event.start, event.end);
+            angular.forEach($scope.events, function(otherEvent) {
+              if (otherEvent === event) {
                 return;
               }
-              var movingEventRange = moment.twix(movingEvent.start, movingEvent.end);
-              var movingEventStart = moment(movingEvent.start);
-              var movingEventEnd = moment(movingEvent.end);
-              if (moveForward) {
-                // Between new start time and old start time
-                if ((movingEventStart.isAfter(newStartTime) ||
-                   movingEventStart.isSame(newStartTime)) &&
-                  (movingEventEnd.isBefore(oldStartTime) ||
-                   movingEventEnd.isSame(oldStartTime)))
-                  {
-                  movingEvent.start = movingEventStart + event.duration;
-                  movingEvent.end = movingEventEnd + event.duration;
-                }
-              } else {
-                if (originalEventRange.engulfs(movingEventRange)) {
-                  movingEvent.start = moment(movingEvent.start).subtract('seconds', event.duration).toDate();
-                  movingEvent.end = moment(movingEvent.end).subtract('seconds', event.duration).toDate();
-                }
+              var otherRange = moment.twix(otherEvent.start, otherEvent.end);
+              if (otherRange.overlaps(eventRange)) {
+                overlapping.push(otherEvent);
               }
             });
+            return overlapping;
           }
-          if (minuteDelta > 1) {
-            moveDisplacedEvents(false);
-          } else {
-            moveDisplacedEvents(true);
+
+          function moveOverlappingEvents(anchoredEvent) {
+            var overlapping = findOverlappingEvents(event);
+            if (overlapping.length) {
+              angular.forEach(overlapping, function(overlappingEvent) {
+                moveEventUntilNotOverlapping(overlappingEvent, event);
+              });
+            }
           }
+
+          function moveEventUntilNotOverlapping(eventToMove, overlappedEvent) {
+            var amountToMove = overlappedEvent.duration;
+            eventToMove.start = moment(eventToMove.start).add('seconds', amountToMove).toDate();
+            eventToMove.end = moment(eventToMove.end).add('seconds', amountToMove).toDate();
+          }
+
+          moveOverlappingEvents(event);
+
         }
         $scope.$apply(function() {
           moveEvent(event);
+          sortEvents();
         });
       },
       eventResize: function(event,dayDelta,minuteDelta,revertFunc) {

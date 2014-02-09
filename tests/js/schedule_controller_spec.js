@@ -231,8 +231,8 @@ describe('ScheduleController', function() {
 				{
 					title: 'third event',
 					start: new Date(2020, 3, 3, 14, 30, 0),
-					end: new Date(2020, 3, 3, 15, 0, 0),
-					duration: 1800
+					end: new Date(2020, 3, 3, 15, 30, 0),
+					duration: 3600
 				}
 			];
 		});
@@ -257,15 +257,43 @@ describe('ScheduleController', function() {
 			movedEvent.start = new Date(2020, 3, 3, 14, 30, 0);
 			movedEvent.end = new Date(2020, 3, 3, 15, 0, 0);
 			scope.uiConfig.calendar.eventDrop(movedEvent, null, minuteDelta);
-			// Second event was moved to occupy the first's original slot
+			// Second event was not moved because didn't need to be
 			expect(scope.events[0].title).toEqual('second event');
 			expect(scope.events[0].start.getHours()).toEqual(12);
-			expect(scope.events[0].start.getMinutes()).toEqual(0);
+			expect(scope.events[0].start.getMinutes()).toEqual(30);
 			expect(scope.events[0].end.getHours()).toEqual(13);
-			expect(scope.events[0].end.getMinutes()).toEqual(0);
+			expect(scope.events[0].end.getMinutes()).toEqual(30);
+
+      // First event is in the right order in the list
+      expect(scope.events[1].title).toEqual('first event');
+      expect(scope.events[1].start.getHours()).toEqual(14);
+      expect(scope.events[1].start.getMinutes()).toEqual(30);
+      expect(scope.events[1].end.getHours()).toEqual(15);
+      expect(scope.events[1].end.getMinutes()).toEqual(0);
+
+      // 3rd event pushed forward 30 minutes
+      expect(scope.events[2].title).toEqual('third event');
+      expect(scope.events[2].start.getHours()).toEqual(15);
+      expect(scope.events[2].start.getMinutes()).toEqual(0);
+      expect(scope.events[2].end.getHours()).toEqual(16);
+      expect(scope.events[2].end.getMinutes()).toEqual(0);
 		});
 
-		it('can move events backwards in time');
+		it('can move events backwards in time', function() {
+      // Move 3rd event to the beginning of 2nd event (from 3pm -> 12:30)
+      var minuteDelta = -150;
+      var movedEvent = scope.events[2];
+      // Moved event is already updated by the time eventDrop() fires
+      movedEvent.start = new Date(2020, 3, 3, 12, 30, 0);
+      movedEvent.end = new Date(2020, 3, 3, 13, 30, 0);
+      scope.uiConfig.calendar.eventDrop(movedEvent, null, minuteDelta);
+      // Second event was moved up by half an hour
+      expect(scope.events[2].title).toEqual('second event');
+      expect(scope.events[2].start.getHours()).toEqual(13);
+      expect(scope.events[2].start.getMinutes()).toEqual(30);
+      expect(scope.events[2].end.getHours()).toEqual(14);
+      expect(scope.events[2].end.getMinutes()).toEqual(30);
+    });
 	});
 
 	describe('resizing an event', function() {
