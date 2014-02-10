@@ -12,12 +12,18 @@ gtdPanic.service('eventMover', function() {
       });
     }
 
+    function eventDurationInSeconds(event) {
+      var start = event.start.getTime() / 1000;
+      var end = event.end.getTime() / 1000;
+      return end - start;
+    }
+
     function moveEventUntilNotOverlapping(eventToMove, anchoredEvent) {
       // A = event to move
       // B = anchored event
       // dist = A.start - B.start + B.duration
       var startRange = moment.twix(eventToMove.start, anchoredEvent.start);
-      var amountToMove = startRange.length('seconds') + anchoredEvent.duration;
+      var amountToMove = startRange.length('seconds') + eventDurationInSeconds(anchoredEvent);
       eventToMove.start = moment(eventToMove.start).add('seconds', amountToMove).toDate();
       eventToMove.end = moment(eventToMove.end).add('seconds', amountToMove).toDate();
     }

@@ -216,21 +216,18 @@ describe('ScheduleController', function() {
 				{
 					title: 'first event',
 					start: new Date(2020, 3, 3, 12, 0, 0),
-					end: new Date(2020, 3, 3, 12, 30, 0),
-					duration: 1800
+					end: new Date(2020, 3, 3, 12, 30, 0)
 				},
 				{
 					title: 'second event',
 					start: new Date(2020, 3, 3, 12, 30, 0),
-					end: new Date(2020, 3, 3, 14, 0, 0),
-					duration: 5400
+					end: new Date(2020, 3, 3, 14, 0, 0)
 				},
 				// Has a gap between it and last event
 				{
 					title: 'third event',
 					start: new Date(2020, 3, 3, 14, 30, 0),
-					end: new Date(2020, 3, 3, 15, 30, 0),
-					duration: 3600
+					end: new Date(2020, 3, 3, 15, 30, 0)
 				}
 			];
 		});
@@ -322,14 +319,12 @@ describe('ScheduleController', function() {
 					title: 'first event',
 					start: new Date(2020, 3, 3, 12, 0, 0),
 					end: new Date(2020, 3, 3, 12, 30, 0),
-					duration: 1800
 				},
 				// Twice as long
 				{
 					title: 'second event',
 					start: new Date(2020, 3, 3, 12, 30, 0),
 					end: new Date(2020, 3, 3, 13, 30, 0),
-					duration: 3600
 				},
         {
           title: 'third event',
@@ -342,12 +337,7 @@ describe('ScheduleController', function() {
       resizedEvent.end = new Date(2020, 3, 3, 13, 30, 0);
 			scope.uiConfig.calendar.eventResize(resizedEvent, null, 60);
       expectEventPlacement(scope.events, 1, 'second event', 13, 30, 14, 30);
-
-      expect(scope.events[2].title).toEqual('third event');
-      expect(scope.events[2].start.getHours()).toEqual(15);
-      expect(scope.events[2].start.getMinutes()).toEqual(0);
-      expect(scope.events[2].end.getHours()).toEqual(15);
-      expect(scope.events[2].end.getMinutes()).toEqual(30);
+      expectEventPlacement(scope.events, 2, 'third event', 15, 0, 15, 30);
 		});
 	});
 

@@ -80,11 +80,13 @@ gtdPanic.controller('ScheduleController', function($scope, $http, $date, savedSc
     }
     snapToGrid(startTime);
 
-    function setupEventDuration(event) {
+    function setupEvent(event) {
       // Duration is in seconds for some reason
+      // It is also transient and should not be persisted
       var durationInSeconds;
       if (event.duration) {
         durationInSeconds = event.duration;
+        delete event.duration;
       } else {
         durationInSeconds = $scope.uiConfig.defaultDuration * 60;
       }
@@ -118,17 +120,17 @@ gtdPanic.controller('ScheduleController', function($scope, $http, $date, savedSc
       return startMoment;
     }
 
-    function setupEvent(event) {
+    function ingestEvent(event) {
       // Skip events after the cutoff
       if (startTime.hour() >= $scope.uiConfig.cutoffTime) {
         return;
       }
-      setupEventDuration(event);
+      setupEvent(event);
 
       // console.log(event);
       $scope.events.push(event);
     }
-    angular.forEach(uploadedEvents, setupEvent);
+    angular.forEach(uploadedEvents, ingestEvent);
   });
 
   $scope.remove = function($index) {
