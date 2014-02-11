@@ -138,7 +138,7 @@ gtdPanic.controller('ScheduleController', function($scope, $http, $date, savedSc
 
   $scope.save = function() {
     function eventsPostData(events) {
-      return _(events).map(function(event) {
+      return events.map(function(event) {
         return {
           title: event.title,
           start: event.start,
