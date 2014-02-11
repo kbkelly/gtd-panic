@@ -85,8 +85,7 @@ describe('ScheduleController', function() {
       var existingEvent = {
         title: 'existing event',
         start: new Date(2020, 3, 3, 9, 30, 0),
-        end: new Date(2020, 3, 3, 10, 0, 0),
-        duration: 1800
+        end: new Date(2020, 3, 3, 10, 0, 0)
       }
       scope.events.push(existingEvent);
       scope.$emit('uploadedEvents', incomingEvents);
@@ -111,6 +110,7 @@ describe('ScheduleController', function() {
 			expect(events[0].start.getMinutes()).toEqual(0);
 			expect(events[0].end.getHours()).toEqual(10);
 			expect(events[0].end.getMinutes()).toEqual(00);
+      expect(events[0].duration).not.toBeDefined();
 		});
 	});
 

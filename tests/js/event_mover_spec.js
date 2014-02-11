@@ -12,20 +12,17 @@ describe('eventMover service', function() {
         {
           title: 'first event',
           start: new Date(2020, 3, 3, 12, 0, 0),
-          end: new Date(2020, 3, 3, 13, 30, 0),
-          duration: 5400
+          end: new Date(2020, 3, 3, 13, 30, 0)
         },
         {
           title: 'second event',
           start: new Date(2020, 3, 3, 12, 30, 0),
-          end: new Date(2020, 3, 3, 13, 30, 0),
-          duration: 3600
+          end: new Date(2020, 3, 3, 13, 30, 0)
         },
         {
           title: 'third event',
           start: new Date(2020, 3, 3, 15, 0, 0),
-          end: new Date(2020, 3, 3, 15, 30, 0),
-          duration: 1800
+          end: new Date(2020, 3, 3, 15, 30, 0)
         }
       ];
       var anchorEvent = events[0];
