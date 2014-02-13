@@ -31,7 +31,7 @@ gtdPanic.controller('ScheduleController', function($scope, $http, $date, savedSc
         var newEvent = {
           title: 'New Event',
           start: start,
-          end: moment(start).add('minutes', 30).toDate()
+          end: moment(start).add('minutes', $scope.uiConfig.defaultDuration).toDate()
         };
         $scope.$apply(function() {
           $scope.events.push(newEvent);

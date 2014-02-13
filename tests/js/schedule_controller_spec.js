@@ -208,6 +208,15 @@ describe('ScheduleController', function() {
 			expect(scope.events[0].start).toEqual(start);
 			expect(scope.events[0].end).toEqual(end);
 		});
+
+    it('pays attention to the default event duration', function() {
+      scope.uiConfig.defaultDuration = 15;
+      var start = new Date(2020, 3, 3, 14, 25, 0);
+      var end = new Date(2020, 3, 3, 14, 40, 0);
+      scope.uiConfig.calendar.dayClick(start);
+      expect(scope.events[0].start).toEqual(start);
+      expect(scope.events[0].end).toEqual(end);
+    });
 	});
 
 	describe('dragging an event', function() {
