@@ -29,11 +29,13 @@ script(type='text/ng-template', id='home.html')
     .event-count [[events.length]] events
     ul.col-md-3.hidden-sm.hidden-xs.event-list
       li.ng-scope(ng-repeat='e in events | orderBy:"start"')
-        .alert.event-entry.ng-binding
-          button.close(ng-click='remove($index)') x
-          input.ng-pristine.ng-valid(type='text', ng-model='e.title')
-          span.start [[e.start |date:'hh:mm']]
-          | -
-          span.end [[e.end |date:'hh:mm']]
+        .alert.event-entry.input-group
+          .input-group-addon
+            button.close(ng-click='remove($index)') x
+          input.form-control(type='text', ng-model='e.title')
+          .input-group-addon
+            span.start [[e.start |date:'hh:mm']]
+            | -
+            span.end [[e.end |date:'hh:mm']]
     .col-md-9
       div(ng-model='eventSources', ui-calendar='uiConfig.calendar', calendar='calendar')
