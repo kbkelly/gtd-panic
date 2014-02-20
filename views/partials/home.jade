@@ -2,9 +2,11 @@ script(type='text/ng-template', id='home.html')
   .row.visible-md.visible-lg
     div(ng-controller='UploadController')
       form.form-inline
-        input(type='file', name='csvUpload', ng-file-select='onSelectCsv($files)')
+        span.btn.btn-default.btn-file
+          | Upload
+          input(type='file', name='csvUpload', ng-file-select='onSelectCsv($files)')
   .row
-    form.form-inline
+    form.navbar-form.navbar-left
       .checkbox
         label
           input(type='checkbox', ng-model='uiConfig.randomize')
@@ -12,19 +14,19 @@ script(type='text/ng-template', id='home.html')
       .form-group
         label(for='defaultDuration')
           | Default Event Duration
-          select#defaultDuration(ng-model='uiConfig.defaultDuration')
+          select.form-control#defaultDuration(ng-model='uiConfig.defaultDuration')
             option(value='15') 15 minutes
             option(value='30') 30 minutes
       .form-group
         label(for='cutoff')
           | Cutoff Time
-          select#cutoff(ng-model='uiConfig.cutoffTime')
+          select.form-control#cutoff(ng-model='uiConfig.cutoffTime')
             option(value='20') 8pm
             option(value='21') 9pm
             option(value='22') 10pm
             option(value='23') 11pm
-      input(type='submit', value='Save', ng-click='save()')
-      input(type='submit', value='Clear', ng-click='clear()')
+      input.btn.btn-default(type='submit', value='Save', ng-click='save()')
+      input.btn.btn-default(type='submit', value='Clear', ng-click='clear()')
   .row
     .event-count [[events.length]] events
     ul.col-md-3.hidden-sm.hidden-xs.event-list
