@@ -1,12 +1,11 @@
 script(type='text/ng-template', id='home.html')
-  .row.visible-md.visible-lg
-    div(ng-controller='UploadController')
+  .navbar.navbar-default.navbar-static-top
+    div.visible-md.visible-lg(ng-controller='UploadController')
       form.form-inline
         span.btn.btn-default.btn-file
           | Upload
           input(type='file', name='csvUpload', ng-file-select='onSelectCsv($files)')
-  .row
-    form.navbar-form.navbar-left
+    form.navbar-form
       .checkbox
         label
           input(type='checkbox', ng-model='uiConfig.randomize')
@@ -27,17 +26,18 @@ script(type='text/ng-template', id='home.html')
             option(value='23') 11pm
       input.btn.btn-default(type='submit', value='Save', ng-click='save()')
       input.btn.btn-default(type='submit', value='Clear', ng-click='clear()')
-  .row
-    .event-count [[events.length]] events
-    ul.col-md-3.hidden-sm.hidden-xs.event-list
-      li.ng-scope(ng-repeat='e in events | orderBy:"start"')
-        .alert.event-entry.input-group
-          .input-group-addon
-            button.close(ng-click='remove($index)') x
-          input.form-control(type='text', ng-model='e.title')
-          .input-group-addon
-            span.start [[e.start |date:'hh:mm']]
-            | -
-            span.end [[e.end |date:'hh:mm']]
-    .col-md-9
-      div(ng-model='eventSources', ui-calendar='uiConfig.calendar', calendar='calendar')
+  .container
+    .row
+      .event-count [[events.length]] events
+      ul.col-md-3.hidden-sm.hidden-xs.event-list
+        li.ng-scope(ng-repeat='e in events | orderBy:"start"')
+          .alert.event-entry.input-group
+            .input-group-addon
+              button.close(ng-click='remove($index)') x
+            input.form-control(type='text', ng-model='e.title')
+            .input-group-addon
+              span.start [[e.start |date:'hh:mm']]
+              | -
+              span.end [[e.end |date:'hh:mm']]
+      .col-md-9
+        div(ng-model='eventSources', ui-calendar='uiConfig.calendar', calendar='calendar')
