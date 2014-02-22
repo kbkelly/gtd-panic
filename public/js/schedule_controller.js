@@ -26,6 +26,14 @@ gtdPanic.controller('ScheduleController', function($scope, $http, $date, savedSc
       defaultView: 'agendaDay',
       ignoreTimezone: false,
       minTime: moment($date).hour(),
+      eventRender: function(event, element) {
+        element.bind('dblclick', function() {
+          var idx = $scope.events.indexOf(event);
+          var textInput = $('.event-entry input').eq(idx);
+          textInput.focus();
+          textInput.select();
+        });
+      },
       dayClick: function(date) {
         var start = new Date(date);
         var newEvent = {
