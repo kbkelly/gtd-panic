@@ -164,7 +164,7 @@ describe('ScheduleController', function() {
 		}));
 
 		it('saving only serializes relevant object properties', inject(function($httpBackend) {
-			// Don't want to send sequelize objects back to the server
+			// Don't want to send fullcalendar properties back to the server
 			scope.events = [ {
 				title: 'send me back',
 				start: 'foo',
@@ -178,8 +178,7 @@ describe('ScheduleController', function() {
 					{
 						title: 'send me back',
 						start: 'foo',
-						end: 'bar',
-						_id: 123,
+						end: 'bar'
 					}
 				]
 			};
@@ -189,8 +188,7 @@ describe('ScheduleController', function() {
 					{
 						title: 'send me back',
 						start: 'foo',
-						end: 'bar',
-						_id: 123,
+						end: 'bar'
 					}
 				]
 			});

@@ -150,8 +150,7 @@ gtdPanic.controller('ScheduleController', function($scope, $http, $date, savedSc
         return {
           title: event.title,
           start: event.start,
-          end: event.end,
-          _id: event._id
+          end: event.end
         };
       });
     }
