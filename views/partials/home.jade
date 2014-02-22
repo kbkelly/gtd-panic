@@ -26,10 +26,10 @@ script(type='text/ng-template', id='home.html')
             option(value='23') 11pm
       input.btn.btn-default(type='submit', value='Save', ng-click='save()')
       input.btn.btn-default(type='submit', value='Clear', ng-click='clear()')
-  .container
-    .row
+  .container-fluid
+    .col-md-3.hidden-sm.hidden-xs
       .event-count [[events.length]] events
-      ul.col-md-3.hidden-sm.hidden-xs.event-list
+      ul.event-list
         li.ng-scope(ng-repeat='e in events | orderBy:"start"')
           .alert.event-entry.input-group
             .input-group-addon
@@ -39,5 +39,5 @@ script(type='text/ng-template', id='home.html')
               span.start [[e.start |date:'hh:mm']]
               | -
               span.end [[e.end |date:'hh:mm']]
-      .col-md-9
-        div(ng-model='eventSources', ui-calendar='uiConfig.calendar', calendar='calendar')
+    .col-md-9
+      div(ng-model='eventSources', ui-calendar='uiConfig.calendar', calendar='calendar')

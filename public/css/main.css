@@ -47,7 +47,7 @@ td, th {
 
 .event-list {
     list-style-type: none;
-    margin-top: 43px;
+    padding-left: 0;
 }
 
 .event-entry {
