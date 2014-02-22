@@ -58,6 +58,10 @@ td, th {
     width: 90%;
 }
 
+.upload {
+    display: inline;
+}
+
 /** Override Bootstrap **/
 .alert {
     padding: 0px;

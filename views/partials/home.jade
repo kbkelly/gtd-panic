@@ -1,11 +1,10 @@
 script(type='text/ng-template', id='home.html')
   .navbar.navbar-default.navbar-static-top
-    div.visible-md.visible-lg(ng-controller='UploadController')
-      form.form-inline
+    form.navbar-form
+      .hidden-xs.hidden-sm.upload(ng-controller='UploadController')
         span.btn.btn-default.btn-file
           | Upload
           input(type='file', name='csvUpload', ng-file-select='onSelectCsv($files)')
-    form.navbar-form
       .checkbox
         label
           input(type='checkbox', ng-model='uiConfig.randomize')
