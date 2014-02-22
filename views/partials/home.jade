@@ -12,17 +12,17 @@ script(type='text/ng-template', id='home.html')
       .form-group
         label(for='defaultDuration')
           | Default Event Duration
-          select.form-control#defaultDuration(ng-model='uiConfig.defaultDuration')
-            option(value='15') 15 minutes
-            option(value='30') 30 minutes
+        select.form-control#defaultDuration(ng-model='uiConfig.defaultDuration')
+          option(value='15') 15 minutes
+          option(value='30') 30 minutes
       .form-group
         label(for='cutoff')
           | Cutoff Time
-          select.form-control#cutoff(ng-model='uiConfig.cutoffTime')
-            option(value='20') 8pm
-            option(value='21') 9pm
-            option(value='22') 10pm
-            option(value='23') 11pm
+        select.form-control#cutoff(ng-model='uiConfig.cutoffTime')
+          option(value='20') 8pm
+          option(value='21') 9pm
+          option(value='22') 10pm
+          option(value='23') 11pm
       input.btn.btn-default(type='submit', value='Save', ng-click='save()')
       input.btn.btn-default(type='submit', value='Clear', ng-click='clear()')
   .container-fluid

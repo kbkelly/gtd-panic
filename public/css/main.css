@@ -67,6 +67,10 @@ td, th {
     padding: 0px;
 }
 
+.navbar .form-group, .navbar .checkbox, .navbar .btn {
+    margin-left: 10px;
+}
+
 /* http://www.abeautifulsite.net/blog/2013/08/whipping-file-inputs-into-shape-with-bootstrap-3/ */
 .btn-file {
     position: relative;
