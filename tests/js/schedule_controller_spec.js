@@ -116,10 +116,10 @@ describe('ScheduleController', function() {
 
 	it('can remove events', function() {
 		scope.events = [
-			{title: 'removed event'},
-			{title: 'remaining event'}
+			{_id: 123, title: 'removed event'},
+			{_id: 456, title: 'remaining event'}
 		];
-		scope.remove(0);
+		scope.remove(123);
 		expect(scope.events.length).toEqual(1);
 		expect(scope.events[0].title).toEqual('remaining event');
 	});

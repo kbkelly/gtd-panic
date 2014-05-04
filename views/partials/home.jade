@@ -32,7 +32,7 @@ script(type='text/ng-template', id='home.html')
         li.ng-scope(ng-repeat='e in events | orderBy:"start"')
           .alert.event-entry.input-group
             .input-group-addon
-              button.close(ng-click='remove($index)') x
+              button.close(ng-click='remove(e._id)') x
             input.form-control(type='text', ng-model='e.title')
             .input-group-addon
               span.start [[e.start |date:'hh:mm']]

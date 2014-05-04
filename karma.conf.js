@@ -16,6 +16,7 @@ module.exports = function(config) {
     files: [
         'public/components/jquery/jquery.js',
         'public/components/jquery-ui/ui/jquery-ui.js',
+        'public/components/underscore/underscore.js',
         'public/components/angular/angular.js',
         'public/components/angular-mocks/angular-mocks.js', // Specs only
         'public/components/angular-ui-calendar/src/calendar.js',

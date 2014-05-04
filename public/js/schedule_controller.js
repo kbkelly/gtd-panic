@@ -140,8 +140,10 @@ gtdPanic.controller('ScheduleController', function($scope, $http, $date, savedSc
     angular.forEach(uploadedEvents, ingestEvent);
   });
 
-  $scope.remove = function($index) {
-    $scope.events.splice($index, 1);
+  $scope.remove = function(eventId) {
+    var foundEvent = _.findWhere($scope.events, {_id: eventId});
+    var index = $scope.events.indexOf(foundEvent);
+    $scope.events.splice(index, 1);
   };
 
   $scope.save = function() {
