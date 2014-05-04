@@ -163,19 +163,23 @@ gtdPanic.controller('ScheduleController', function($scope, $http, $date, savedSc
       $location.replace();
     }
 
-    var postData;
+    var postData, promise;
+    $scope.saving = true;
     if (savedSchedule) {
       postData = {
         _id: savedSchedule._id,
         events: eventsPostData($scope.events)
       };
-      $http.put('/schedules/' + savedSchedule._id, postData);
+      promise = $http.put('/schedules/' + savedSchedule._id, postData);
     } else {
       postData = {
         events: eventsPostData($scope.events)
       };
-      $http.post('/schedules', postData).success(redirect);
+      promise = $http.post('/schedules', postData).success(redirect);
     }
+    promise.finally(function() {
+      $scope.saving = false;
+    });
   };
 
   $scope.clear = function() {

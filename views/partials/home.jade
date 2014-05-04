@@ -24,6 +24,7 @@ script(type='text/ng-template', id='home.html')
           option(value='22') 10pm
           option(value='23') 11pm
       input.btn.btn-default(type='submit', value='Save', ng-click='save()')
+      img(src='/img/ajax-loader.gif', ng-show='saving')
       input.btn.btn-default(type='submit', value='Clear', ng-click='clear()')
   .container-fluid
     .col-md-3.hidden-sm.hidden-xs
