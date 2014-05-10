@@ -2,7 +2,7 @@ var gtdPanic = angular.module('GtdPanic', [
     'ui.calendar',
     'ui.router',
     'angularFileUpload'
-    ], 
+    ],
     function($interpolateProvider) {
     $interpolateProvider.startSymbol('[[');
     $interpolateProvider.endSymbol(']]');
@@ -48,4 +48,20 @@ gtdPanic.config(function($stateProvider, $urlRouterProvider) {
         });
 
     $urlRouterProvider.otherwise('/errors/404');
+});
+
+gtdPanic.directive('focus', function($parse) {
+    return {
+        restrict: 'A',
+        link: function(scope, element, attrs) {
+            var expr = attrs.focus + '.focused';
+            scope.$watch(expr, function(newValue, oldValue) {
+                if (newValue) {
+                    scope[attrs.focus].focused = false;
+                    element.focus();
+                    element.select();
+                }
+            });
+        }
+    }
 });

@@ -34,7 +34,7 @@ script(type='text/ng-template', id='home.html')
           .alert.event-entry.input-group
             .input-group-addon
               button.close(ng-click='remove(e._id)') x
-            input.form-control(type='text', ng-model='e.title')
+            input.form-control(type='text', ng-model='e.title', focus='e')
             .input-group-addon
               span.start [[e.start |date:'hh:mm']]
               | -
