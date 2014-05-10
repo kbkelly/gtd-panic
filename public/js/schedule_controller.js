@@ -84,6 +84,7 @@ gtdPanic.controller('ScheduleController', function($scope, $http, $date, savedSc
       } else {
         aMoment.minutes(0);
       }
+      aMoment.seconds(0);
     }
     snapToGrid(startTime);
 
