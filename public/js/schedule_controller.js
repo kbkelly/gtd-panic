@@ -16,6 +16,12 @@ gtdPanic.controller('ScheduleController', function($scope, $http, $date, savedSc
       return array;
   }
 
+  function focusEventTitleInput(event) {
+    $scope.$apply(function() {
+      event.focused = true;
+    });
+  }
+
   $scope.uiConfig = {
     defaultDuration: 30,
     cutoffTime: 23,
@@ -28,9 +34,7 @@ gtdPanic.controller('ScheduleController', function($scope, $http, $date, savedSc
       minTime: moment($date).hour(),
       eventRender: function(event, element) {
         element.bind('dblclick', function() {
-          $scope.$apply(function() {
-            event.focused = true;
-          });
+          focusEventTitleInput(event);
         });
       },
       dayClick: function(date) {
@@ -43,6 +47,7 @@ gtdPanic.controller('ScheduleController', function($scope, $http, $date, savedSc
         $scope.$apply(function() {
           $scope.events.push(newEvent);
         });
+        focusEventTitleInput(newEvent);
       },
       eventDrop: function(event) {
         $scope.$apply(function() {
